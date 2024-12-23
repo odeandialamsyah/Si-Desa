@@ -1,3 +1,22 @@
+<?php
+session_start();
+
+// Periksa apakah cookie 'email' masih aktif
+if (!isset($_COOKIE['email'])) {
+    // Jika cookie habis, hapus session dan arahkan ke login
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+
+// Periksa apakah session masih ada (antisipasi manual logout)
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -113,7 +132,7 @@
 
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="dtlAdmn.html">Profile</a></li>
-                        <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                        <li><a class="dropdown-item" href="Back-End/logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
