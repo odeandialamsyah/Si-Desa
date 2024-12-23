@@ -15,7 +15,7 @@ if ($result->num_rows > 0) {
     $_SESSION['email'] = $row['email'];
 
     // Mengatur cookie untuk 15 menit
-    setcookie('email', $row['email'], time() + (15 * 60), "/dashboard");
+    setcookie('email', $row['email'], time() + (15 * 60), "/");
     // Ini mengatur cookie untuk 60 detik, untuk pengujian
     // setcookie('email', $row['email'], time() + (60), "/");
 

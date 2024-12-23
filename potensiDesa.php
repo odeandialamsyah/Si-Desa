@@ -289,7 +289,7 @@
                             </div>
                         </section>
 
-                        <a href="landingPage.html" class="btn btn-primary mt-4">Kembali</a>
+                        <a href="index.php" class="btn btn-primary mt-4">Kembali</a>
                     </div>
                 </div>
             </div>

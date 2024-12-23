@@ -335,7 +335,7 @@ session_start();
                         <div class="feature-item">
                             <i class="fas fa-fish feature-icon"></i>
                             <div class="feature-text">
-                                <b><a style="text-decoration:none; color:black" href="pendapatanDesa.html"> Pendapatan Desa</a></b> <br>
+                                <b><a style="text-decoration:none; color:black" href="pendapatanDesa.php"> Pendapatan Desa</a></b> <br>
                                 <strong></strong> Mayoritas pendapatan desa berasal dari sektor perikanan dan
                                 pariwisata. Selain itu, pertanian dan perdagangan lokal juga menjadi sumber pendapatan penting
                                 lainnya.
@@ -346,7 +346,7 @@ session_start();
                         <div class="feature-item">
                             <i class="fas fa-map-marker-alt feature-icon"></i>
                             <div class="feature-text">
-                                <b><a style="text-decoration:none; color:black" href="potensiDesa.html">Potensi Desa</a></b> <br>
+                                <b><a style="text-decoration:none; color:black" href="potensiDesa.php">Potensi Desa</a></b> <br>
                                 <strong></strong> Kampung Ugar memiliki potensi besar dalam pengembangan wisata bahari,
                                 wisata sejarah, dan kuliner khas Papua. Selain itu, desa ini juga memiliki potensi dalam bidang
                                 konservasi satwa dan pelestarian lingkungan.
