@@ -37,22 +37,24 @@
                 $no = 1;
                 while ($row = mysqli_fetch_assoc($result)) {
                     $totalGaji += $row['gaji'];
-                    echo "<tr onclick=\"redirectToDetail('dtlPdk" . $row['penduduk_id'] . ".html')\">
-                        <td>" . $no++ . "</td>
-                        <td>{$row['nik']}</td>
-                        <td>{$row['nama_lengkap']}</td>
-                        <td>{$row['jenis_kelamin']}</td>
-                        <td>{$row['tempat_lahir']}, {$row['tanggal_lahir']}</td>
-                        <td>{$row['pekerjaan']}</td>
-                        <td>Rp." . number_format($row['gaji'], 0, ',', '.') . "</td>
-                        <td>{$row['rt']}/{$row['rw']}</td>
-                        <td>{$row['jumlah_keluarga']}</td>
-                        <td>
-                            <i class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></i>
-                            <i class='fa-solid fa-trash mr-2' style='color: #ff0000;'></i>
-                            <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;'></i>
-                        </td>
-                    </tr>";
+                    echo "<tr>
+                    <td>" . $no++ . "</td>
+                    <td>{$row['nik']}</td>
+                    <td>{$row['nama_lengkap']}</td>
+                    <td>{$row['jenis_kelamin']}</td>
+                    <td>{$row['tempat_lahir']}, {$row['tanggal_lahir']}</td>
+                    <td>{$row['pekerjaan']}</td>
+                    <td>Rp." . number_format($row['gaji'], 0, ',', '.') . "</td>
+                    <td>{$row['rt']}/{$row['rw']}</td>
+                    <td>{$row['jumlah_keluarga']}</td>
+                    <td>
+                        <a href='Back-End/update_penduduk.php?nik={$row['nik']}' class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></a>
+                        <a href='Back-End/delete_penduduk.php?nik={$row['nik']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
+                            <i class='fa-solid fa-trash mr-2'></i>
+                        </a>
+                        <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;'></i>
+                    </td>
+                </tr>";
                 }
                 ?>
         </tbody>
