@@ -15,8 +15,9 @@ $queryDesa = "SELECT daerah_id, nama_daerah FROM daerah";
 $resultDesa = mysqli_query($conn, $queryDesa);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $daerah_id = mysqli_real_escape_string($conn, $_POST['daerah_id']);
+    $kk = mysqli_real_escape_string($conn, $_POST['kk']);
     $nik = $_POST['nik'];
-    $daerah_id = mysqli_real_escape_string($conn, $_POST['daerah_id']); // Ambil ID desa
     $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
     $jenis_kelamin = mysqli_real_escape_string($conn, $_POST['jenis_kelamin']);
     $tanggal_lahir = mysqli_real_escape_string($conn, $_POST['tanggal_lahir']);
@@ -25,9 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gaji = mysqli_real_escape_string($conn, $_POST['gaji']);
     $jumlah_keluarga = mysqli_real_escape_string($conn, $_POST['jumlah_keluarga']);
 
+    // Validasi KK (16 digit angka)
+    if (!preg_match('/^\d{16}$/', $kk)) {
+        echo "<script>alert('Nomor KK harus terdiri dari 16 digit angka!'); window.history.back();</script>";
+        exit;
+    }
+
     // Query untuk update data
     $query = "UPDATE penduduk SET 
               daerah_id = '$daerah_id',
+              kk = '$kk',
               nama_lengkap = '$nama_lengkap', 
               jenis_kelamin = '$jenis_kelamin',
               tanggal_lahir = '$tanggal_lahir',
@@ -57,6 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container mt-5">
         <h1 class="mb-4">Update Data Penduduk</h1>
         <form method="post" action="">
+            <!-- KK -->
+            <div class="mb-3">
+                <label for="kk" class="form-label">KK</label>
+                <input type="text" class="form-control" id="kk" name="kk" value="<?php echo htmlspecialchars($penduduk['kk']); ?>">
+            </div>
+
             <!-- NIK -->
             <div class="mb-3">
                 <label for="nik" class="form-label">NIK</label>

@@ -219,6 +219,12 @@
             </div>
             <div class="modal-body">
                 <form id="formAddPenduduk" method="POST" action="Back-End/proses_tambah_penduduk.php">
+                    <!-- KK -->
+                    <div class="mb-3">
+                        <label for="kk" class="form-label">KK</label>
+                        <input type="text" class="form-control" id="kk" name="kk" required>
+                    </div>
+
                     <!-- NIK -->
                     <div class="mb-3">
                         <label for="nik" class="form-label">NIK</label>
