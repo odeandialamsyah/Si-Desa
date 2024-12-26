@@ -81,7 +81,7 @@ if (!isset($_SESSION['email'])) {
         <div class="side-menu">
             <ul>
                 <li>
-                    <a href="index.php" class="active" style="text-decoration: none;">
+                    <a href="dashboard.php" class="active" style="text-decoration: none;">
                         <span class="fa fa-compass"></span>
                         <small>Dashboard</small>
                     </a>
