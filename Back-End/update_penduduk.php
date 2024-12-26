@@ -1,6 +1,7 @@
 <?php
 include 'Koneksi/koneksi.php';
 
+// Ambil NIK dari URL
 $nik = $_GET['nik'];
 $nik = mysqli_real_escape_string($conn, $nik);
 
@@ -9,28 +10,30 @@ $query = "SELECT * FROM penduduk WHERE nik = '$nik'";
 $result = mysqli_query($conn, $query);
 $penduduk = mysqli_fetch_assoc($result);
 
+// Query untuk mendapatkan data desa
+$queryDesa = "SELECT daerah_id, nama_daerah FROM daerah";
+$resultDesa = mysqli_query($conn, $queryDesa);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nik = $_POST['nik'];
+    $daerah_id = mysqli_real_escape_string($conn, $_POST['daerah_id']); // Ambil ID desa
     $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
     $jenis_kelamin = mysqli_real_escape_string($conn, $_POST['jenis_kelamin']);
     $tanggal_lahir = mysqli_real_escape_string($conn, $_POST['tanggal_lahir']);
     $tempat_lahir = mysqli_real_escape_string($conn, $_POST['tempat_lahir']);
     $pekerjaan = mysqli_real_escape_string($conn, $_POST['pekerjaan']);
     $gaji = mysqli_real_escape_string($conn, $_POST['gaji']);
-    $rt = mysqli_real_escape_string($conn, $_POST['rt']);
-    $rw = mysqli_real_escape_string($conn, $_POST['rw']);
     $jumlah_keluarga = mysqli_real_escape_string($conn, $_POST['jumlah_keluarga']);
 
     // Query untuk update data
     $query = "UPDATE penduduk SET 
+              daerah_id = '$daerah_id',
               nama_lengkap = '$nama_lengkap', 
               jenis_kelamin = '$jenis_kelamin',
               tanggal_lahir = '$tanggal_lahir',
               tempat_lahir = '$tempat_lahir',
               pekerjaan = '$pekerjaan',
               gaji = '$gaji',
-              rt = '$rt',
-              rw = '$rw',
               jumlah_keluarga = '$jumlah_keluarga'
               WHERE nik = '$nik'";
 
@@ -75,6 +78,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
 
+            <!-- Desa -->
+            <div class="mb-3">
+                <label for="daerah_id" class="form-label">Desa</label>
+                <select class="form-select" id="daerah_id" name="daerah_id" required>
+                    <option value="">Pilih Desa</option>
+                    <?php
+                    while ($row = mysqli_fetch_assoc($resultDesa)) {
+                        $selected = ($penduduk['daerah_id'] == $row['daerah_id']) ? 'selected' : '';
+                        echo "<option value='{$row['daerah_id']}' $selected>{$row['nama_daerah']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
             <!-- Tanggal Lahir -->
             <div class="mb-3">
                 <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
@@ -97,18 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="mb-3">
                 <label for="gaji" class="form-label">Gaji/Bulan</label>
                 <input type="number" class="form-control" id="gaji" name="gaji" step="0.01" value="<?php echo htmlspecialchars($penduduk['gaji']); ?>" required>
-            </div>
-
-            <!-- RT -->
-            <div class="mb-3">
-                <label for="rt" class="form-label">RT</label>
-                <input type="number" class="form-control" id="rt" name="rt" value="<?php echo htmlspecialchars($penduduk['rt']); ?>" required>
-            </div>
-
-            <!-- RW -->
-            <div class="mb-3">
-                <label for="rw" class="form-label">RW</label>
-                <input type="number" class="form-control" id="rw" name="rw" value="<?php echo htmlspecialchars($penduduk['rw']); ?>" required>
             </div>
 
             <!-- Jumlah Keluarga -->

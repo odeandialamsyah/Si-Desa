@@ -1,3 +1,17 @@
+<?php
+    // Koneksi ke database
+    include 'Back-End/Koneksi/koneksi.php';
+
+    // Query untuk mengambil data desa
+    $queryDesa = "SELECT daerah_id, nama_daerah FROM daerah";
+    $resultDesa = mysqli_query($conn, $queryDesa);
+
+    // Validasi query desa
+    if (!$resultDesa) {
+        die("Query desa gagal: " . mysqli_error($conn));
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -143,7 +157,6 @@
                     <th scope="col">Tempat, Tanggal Lahir</th>
                     <th scope="col">Riwayat pekerjaan</th>
                     <th scope="col">gaji/bulan</th>
-                    <th scope="col">RT / RW</th>
                     <th scope="col">Jumlah Keluarga</th>
                     <th scope="col">Opsi</th>
                 </tr>
@@ -165,7 +178,6 @@
                     <td>{$row['tempat_lahir']}, {$row['tanggal_lahir']}</td>
                     <td>{$row['pekerjaan']}</td>
                     <td>Rp." . number_format($row['gaji'], 0, ',', '.') . "</td>
-                    <td>{$row['rt']}/{$row['rw']}</td>
                     <td>{$row['jumlah_keluarga']}</td>
                     <td>
                         <a href='Back-End/update_penduduk.php?nik={$row['nik']}' class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></a>
@@ -181,7 +193,16 @@
             <tfoot>
                 <tr>
                     <td colspan="6">Pendapatan Rata-rata</td>
-                    <td colspan="4">Rp.<?php echo number_format($totalGaji / ($no - 1), 0, ',', '.'); ?> perbulan</td>
+                    <td colspan="4">Rp.
+                        <?php 
+                            // Cek apakah $no lebih dari 1 (ada data)
+                            if ($no > 1) {
+                                echo number_format($totalGaji / ($no - 1), 0, ',', '.'); 
+                            } else {
+                                echo '0'; // Tampilkan 0 jika tidak ada data
+                            }
+                        ?> perbulan
+                    </td>
                 </tr>
             </tfoot>
         </table>
@@ -219,6 +240,20 @@
                         </select>
                     </div>
 
+                    <!-- Dropdown Desa -->
+                    <div class="mb-3">
+                        <label for="daerah_id" class="form-label">Desa</label>
+                        <select class="form-select" id="daerah_id" name="daerah_id" required>
+                            <option value="">Pilih Desa</option>
+                            <?php
+                            // Loop data desa
+                            while ($row = mysqli_fetch_assoc($resultDesa)) {
+                                echo '<option value="' . $row['daerah_id'] . '">' . $row['nama_daerah'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+
                     <!-- Tanggal Lahir -->
                     <div class="mb-3">
                         <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
@@ -241,18 +276,6 @@
                     <div class="mb-3">
                         <label for="gaji" class="form-label">Gaji/Bulan</label>
                         <input type="number" class="form-control" id="gaji" name="gaji" step="0.01" required>
-                    </div>
-
-                    <!-- RT -->
-                    <div class="mb-3">
-                        <label for="rt" class="form-label">RT</label>
-                        <input type="number" class="form-control" id="rt" name="rt" required>
-                    </div>
-
-                    <!-- RW -->
-                    <div class="mb-3">
-                        <label for="rw" class="form-label">RW</label>
-                        <input type="number" class="form-control" id="rw" name="rw" required>
                     </div>
 
                     <!-- Jumlah Keluarga -->

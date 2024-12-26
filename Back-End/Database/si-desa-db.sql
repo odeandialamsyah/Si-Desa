@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 24, 2024 at 07:54 AM
+-- Generation Time: Dec 26, 2024 at 04:12 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -65,10 +65,12 @@ CREATE TABLE `daerah` (
 --
 
 INSERT INTO `daerah` (`daerah_id`, `nama_daerah`, `jenis_daerah`, `created_at`, `updated_at`) VALUES
-(1, 'Jakarta', 'Kota', '2024-12-24 06:17:57', '2024-12-24 06:17:57'),
-(2, 'Bandung', 'Kota', '2024-12-24 06:17:57', '2024-12-24 06:17:57'),
-(3, 'Bekasi', 'Kabupaten', '2024-12-24 06:17:57', '2024-12-24 06:17:57'),
-(4, 'Bogor', 'Kota', '2024-12-24 06:17:57', '2024-12-24 06:17:57');
+(1, 'Desa Ugar', 'desa', '2024-12-26 14:56:55', '2024-12-26 14:56:55'),
+(2, 'Desa Arguni', 'desa', '2024-12-26 14:56:55', '2024-12-26 14:56:55'),
+(3, 'Desa Werpigan', 'desa', '2024-12-26 14:56:55', '2024-12-26 14:56:55'),
+(4, 'Desa Kinam', 'desa', '2024-12-26 14:56:55', '2024-12-26 14:56:55'),
+(5, 'Desa Tomage', 'desa', '2024-12-26 14:56:55', '2024-12-26 14:56:55'),
+(6, 'Desa Otoweri', 'desa', '2024-12-26 14:56:55', '2024-12-26 14:56:55');
 
 -- --------------------------------------------------------
 
@@ -87,8 +89,6 @@ CREATE TABLE `penduduk` (
   `tempat_lahir` varchar(50) NOT NULL,
   `pekerjaan` varchar(50) DEFAULT NULL,
   `gaji` decimal(15,2) DEFAULT NULL,
-  `rt` int(11) DEFAULT NULL,
-  `rw` int(11) DEFAULT NULL,
   `jumlah_keluarga` int(11) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -98,10 +98,9 @@ CREATE TABLE `penduduk` (
 -- Dumping data for table `penduduk`
 --
 
-INSERT INTO `penduduk` (`penduduk_id`, `daerah_id`, `agama_id`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `rt`, `rw`, `jumlah_keluarga`, `created_at`, `updated_at`) VALUES
-(1, NULL, NULL, '1234567891234522', 'Asep sudarseo', 'Laki-laki', '2024-12-24', 'Bandung', 'Pengusaha', '10000000.00', 1, 10, 4, '2024-12-24 06:41:32', '2024-12-24 06:41:32'),
-(2, NULL, NULL, '7786237846236434', 'Dimas Mabar', 'Perempuan', '2024-12-04', 'Bandung', 'Pengusaha', '20000000.00', 2, 12, 5, '2024-12-24 06:49:09', '2024-12-24 06:49:09'),
-(3, NULL, NULL, '546883638282937', 'Ucup botol', 'Perempuan', '2002-07-24', 'Cimahi', 'PNS', '7000000.00', 8, 8, 2, '2024-12-24 06:53:14', '2024-12-24 06:53:14');
+INSERT INTO `penduduk` (`penduduk_id`, `daerah_id`, `agama_id`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `jumlah_keluarga`, `created_at`, `updated_at`) VALUES
+(1, 1, NULL, '3276010101010001', 'Andi Saputra', 'Laki-laki', '1990-07-26', 'Bandung', 'Pengusaha', '3000000.00', 4, '2024-12-26 15:01:35', '2024-12-26 15:01:35'),
+(2, 3, NULL, '3276010101010002', 'Siti Aminah', 'Perempuan', '1991-07-26', 'Cimahi', 'Petani', '2500000.00', 2, '2024-12-26 15:04:19', '2024-12-26 15:09:27');
 
 -- --------------------------------------------------------
 
@@ -169,13 +168,13 @@ ALTER TABLE `agama`
 -- AUTO_INCREMENT for table `daerah`
 --
 ALTER TABLE `daerah`
-  MODIFY `daerah_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `daerah_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `penduduk`
 --
 ALTER TABLE `penduduk`
-  MODIFY `penduduk_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `penduduk_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
