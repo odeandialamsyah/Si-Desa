@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 26, 2024 at 04:12 PM
+-- Generation Time: Dec 26, 2024 at 05:06 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -82,6 +82,7 @@ CREATE TABLE `penduduk` (
   `penduduk_id` int(11) NOT NULL,
   `daerah_id` int(11) DEFAULT NULL,
   `agama_id` int(11) DEFAULT NULL,
+  `kk` varchar(20) NOT NULL,
   `nik` varchar(20) NOT NULL,
   `nama_lengkap` varchar(100) NOT NULL,
   `jenis_kelamin` enum('Laki-laki','Perempuan') NOT NULL,
@@ -98,9 +99,9 @@ CREATE TABLE `penduduk` (
 -- Dumping data for table `penduduk`
 --
 
-INSERT INTO `penduduk` (`penduduk_id`, `daerah_id`, `agama_id`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `jumlah_keluarga`, `created_at`, `updated_at`) VALUES
-(1, 1, NULL, '3276010101010001', 'Andi Saputra', 'Laki-laki', '1990-07-26', 'Bandung', 'Pengusaha', '3000000.00', 4, '2024-12-26 15:01:35', '2024-12-26 15:01:35'),
-(2, 3, NULL, '3276010101010002', 'Siti Aminah', 'Perempuan', '1991-07-26', 'Cimahi', 'Petani', '2500000.00', 2, '2024-12-26 15:04:19', '2024-12-26 15:09:27');
+INSERT INTO `penduduk` (`penduduk_id`, `daerah_id`, `agama_id`, `kk`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `jumlah_keluarga`, `created_at`, `updated_at`) VALUES
+(1, 6, NULL, '3201011234567890', '3201012345678901', 'Budi Santoso', 'Laki-laki', '1989-11-13', 'Bandung', 'Petani', '5000000.00', 4, '2024-12-26 16:00:15', '2024-12-26 16:05:59'),
+(2, 6, NULL, '3201011234567890', '3201012345678902', 'Siti Aminah', 'Perempuan', '1994-12-15', 'Jakarta', 'Guru', '4500000.00', 4, '2024-12-26 16:01:33', '2024-12-26 16:06:21');
 
 -- --------------------------------------------------------
 
@@ -146,7 +147,8 @@ ALTER TABLE `penduduk`
   ADD PRIMARY KEY (`penduduk_id`),
   ADD UNIQUE KEY `nik` (`nik`),
   ADD KEY `daerah_id` (`daerah_id`),
-  ADD KEY `agama_id` (`agama_id`);
+  ADD KEY `agama_id` (`agama_id`),
+  ADD KEY `kk` (`kk`);
 
 --
 -- Indexes for table `users`
