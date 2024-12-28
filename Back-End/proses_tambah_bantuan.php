@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
         
         if ($stmt->affected_rows > 0) {
-            echo "Bantuan berhasil ditambahkan!";
+            echo "<script>alert('Data Bantuan berhasil dihapus!'); window.location.href='../BantuanSosial.php';</script>";
         } else {
-            echo "Gagal menambahkan bantuan.";
+            echo "<script>alert('Gagal menambahkan data. Silakan coba lagi.'); window.history.back();</script>";
         }
 
         $stmt->close();

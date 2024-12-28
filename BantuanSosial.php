@@ -146,7 +146,9 @@ $no = 1;
                                 <td>{$row['jenis_bantuan']}</td>
                                 <td>
                                     <i class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></i>
-                                    <i class='fa-solid fa-trash mr-2' style='color: #ff0000;'></i>
+                                    <a href='Back-End/delete_bantuan.php?bantuan_id={$row['bantuan_id']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
+                                        <i class='fa-solid fa-trash mr-2'></i>
+                                    </a>
                                     <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;' data-bs-toggle='modal' data-bs-target='#modal1'></i>
                                 </td>
                             </tr>
