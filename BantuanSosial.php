@@ -145,7 +145,9 @@ $no = 1;
                                 <td>{$row['nama_bantuan']}</td>
                                 <td>{$row['jenis_bantuan']}</td>
                                 <td>
-                                    <i class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></i>
+                                    <a href='Back-End/update_bantuan.php?bantuan_id={$row['bantuan_id']}' onclick='return confirm(\"Apakah Anda yakin ingin mengedit data ini?\") class='text-danger'>
+                                        <i class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></i>
+                                    </a>
                                     <a href='Back-End/delete_bantuan.php?bantuan_id={$row['bantuan_id']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
                                         <i class='fa-solid fa-trash mr-2'></i>
                                     </a>
