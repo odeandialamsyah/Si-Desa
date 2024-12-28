@@ -42,6 +42,23 @@
             width: 100% !important; /* Memastikan grafik menyesuaikan lebar kontainer */
             height: auto !important; /* Memastikan grafik menyesuaikan tinggi kontainer */
         }
+
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa; /* Warna latar belakang opsional */
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px; /* Membatasi lebar form */
+        }
     </style>
 </head>
 <body>
@@ -98,91 +115,53 @@
         </div>
     </div>
 
-    <div class="main-content">
-        <header>
-            <div class="header-content">
-                <label for="menu-toggle">
-                    <span class="fa-solid fa-bars mt-3" style="color: rgb(255, 255, 255);"></span>
-                </label>
+    <div class="form-container">
+    <form>
+        <h2 class="text-center"><b>LAPORAN</b></h2>
+        <div class="mb-3">
+            <label for="kk" class="form-label"><b>KK</b></label>
+            <select id="kk" class="form-select">
+                <option selected>Pilih Kartu Keluarga</option>
+                <option value="1">12350-Ugar</option>
+                <option value="2">12351-Arguni</option>
+                <option value="3">12352-Werpigan</option>
+                <option value="4">12353-Kinam</option>
+                <option value="5">12354-Tomage</option>
+                <option value="6">12360-Otoweri</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="agama" class="form-label"><b>Agama</b></label>
+            <select id="agama" class="form-select">
+                <option selected>Pilih Agama</option>
+                <option value="1">Islam</option>
+                <option value="2">Kristen</option>
+                <option value="3">Katolik</option>
+                <option value="4">Hindu</option>
+                <option value="5">Budha</option>
+                <option value="6">Konghucu</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="klasifikasi" class="form-label"><b>Klasifikasi</b></label>
+            <select id="klasifikasi" class="form-select">
+                <option selected>Pilih Klasifikasi</option>
+                <option value="1">Desa Ugar</option>
+                <option value="2">Desa Arguni</option>
+                <option value="3">Desa Werpigan</option>
+                <option value="4">Desa Kinam</option>
+                <option value="5">Desa Tomage</option>
+                <option value="6">Desa Otoweri</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+</div>
 
-                <div class="dropdown">
-                    <span><i class="fa-solid fa-user mr-1" style="color: rgb(255, 255, 255);"></i></span>
-                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color: rgb(255, 255, 255);">
-                        <b>Admin</b>
-                    </a>
-
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="dtlAdmn.html">Profile</a></li>
-                        <li><a class="dropdown-item" href="Back-End/logout.php">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </header>
-    </div>
-        <main>
-            <table>
-                <tr class="large-font">
-            <td colspan="7" style="text-align: center;">
-                <h2><b>LAPORAN</b></h2>
-            </td>
-        </tr>
-                <tr>
-					<table>
-						<tr>
-							<td><b>KK</b></td>
-							<td>
-								<select class="form-select" aria-label="Default select example">
-									<option selected>Pilih Kartu Keluarga</option>
-									<option value="1">12350-Ugar</option>
-									<option value="2">12351-Arguni</option>
-									<option value="2">12352-Werpigan</option>
-									<option value="2">12353-Kinam</option>
-									<option value="2">12354-Tomage</option>
-									<option value="2">12360-Otoweri</option>
-								  </select>
-							</td>
-						</tr>
-						<tr>
-							<td><b>Agama</b></td>
-							<td>
-								<select class="form-select" aria-label="Default select example">
-									<option selected>Pilih Agama</option>
-									<option value="1">Islam</option>
-									<option value="2">Kristen</option>
-									<option value="2">Katolik</option>
-									<option value="2">Hindu</option>
-									<option value="2">Budha</option>
-									<option value="2">Konhucu</option>
-								  </select>
-							</td>
-						</tr>
-						<tr>
-							<td><b>Klasifikasi</b></td>
-							<td>
-								<select class="form-select" aria-label="Default select example">
-									<option selected>Pilih Klasifikasi</option>
-									<option value="1">Desa Ugar</option>
-									<option value="2">Desa Arguni</option>
-									<option value="2">Desa Werpigan</option>
-									<option value="2">Desa Kinam</option>
-									<option value="2">Desa Tomage</option>
-									<option value="2">Desa Otoweri</option>
-								  </select>							
-							</td>
-						</tr>
-					</table>
-                </tr>
-            </table>
-
-			<button type="submit" class="btn btn-primary mb-3">Submit</button>
-
-        </main>
-
-        <script type="text/javascript" src="index.js"></script>
-        <script type="text/javascript" src="dataAnggota.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    </div>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="dataAnggota.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 </body>
 </html>

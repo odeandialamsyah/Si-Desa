@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 26, 2024 at 05:06 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.0.25
+-- Host: localhost:3306
+-- Generation Time: Dec 28, 2024 at 03:01 AM
+-- Server version: 8.0.30
+-- PHP Version: 8.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,10 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `agama` (
-  `agama_id` int(11) NOT NULL,
-  `nama_agama` varchar(50) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `agama_id` int NOT NULL,
+  `nama_agama` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -49,15 +49,37 @@ INSERT INTO `agama` (`agama_id`, `nama_agama`, `created_at`, `updated_at`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bantuan`
+--
+
+CREATE TABLE `bantuan` (
+  `bantuan_id` int NOT NULL,
+  `nama_bantuan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `jenis_bantuan` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `penduduk_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bantuan`
+--
+
+INSERT INTO `bantuan` (`bantuan_id`, `nama_bantuan`, `jenis_bantuan`, `created_at`, `updated_at`, `penduduk_id`) VALUES
+(7, 'sembako', 'Uang Tunai', '2024-12-28 02:54:37', '2024-12-28 02:54:37', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `daerah`
 --
 
 CREATE TABLE `daerah` (
-  `daerah_id` int(11) NOT NULL,
-  `nama_daerah` varchar(100) NOT NULL,
-  `jenis_daerah` varchar(50) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `daerah_id` int NOT NULL,
+  `nama_daerah` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `jenis_daerah` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -79,20 +101,20 @@ INSERT INTO `daerah` (`daerah_id`, `nama_daerah`, `jenis_daerah`, `created_at`, 
 --
 
 CREATE TABLE `penduduk` (
-  `penduduk_id` int(11) NOT NULL,
-  `daerah_id` int(11) DEFAULT NULL,
-  `agama_id` int(11) DEFAULT NULL,
-  `kk` varchar(20) NOT NULL,
-  `nik` varchar(20) NOT NULL,
-  `nama_lengkap` varchar(100) NOT NULL,
-  `jenis_kelamin` enum('Laki-laki','Perempuan') NOT NULL,
+  `penduduk_id` int NOT NULL,
+  `daerah_id` int DEFAULT NULL,
+  `agama_id` int DEFAULT NULL,
+  `kk` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `nik` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_lengkap` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `jenis_kelamin` enum('Laki-laki','Perempuan') COLLATE utf8mb4_general_ci NOT NULL,
   `tanggal_lahir` date NOT NULL,
-  `tempat_lahir` varchar(50) NOT NULL,
-  `pekerjaan` varchar(50) DEFAULT NULL,
+  `tempat_lahir` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `pekerjaan` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `gaji` decimal(15,2) DEFAULT NULL,
-  `jumlah_keluarga` int(11) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `jumlah_keluarga` int DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -110,11 +132,11 @@ INSERT INTO `penduduk` (`penduduk_id`, `daerah_id`, `agama_id`, `kk`, `nik`, `na
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `id` int NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -122,78 +144,27 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'admin@gmail.com', '0192023a7bbd73250516f069df18b500', '2024-12-23 01:24:12', '2024-12-23 01:30:23');
+(1, 'admin@gmail.com', '0192023a7bbd73250516f069df18b500', '2024-12-22 18:24:12', '2024-12-22 18:30:23');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `agama`
+-- Indexes for table `bantuan`
 --
-ALTER TABLE `agama`
-  ADD PRIMARY KEY (`agama_id`);
-
---
--- Indexes for table `daerah`
---
-ALTER TABLE `daerah`
-  ADD PRIMARY KEY (`daerah_id`);
-
---
--- Indexes for table `penduduk`
---
-ALTER TABLE `penduduk`
-  ADD PRIMARY KEY (`penduduk_id`),
-  ADD UNIQUE KEY `nik` (`nik`),
-  ADD KEY `daerah_id` (`daerah_id`),
-  ADD KEY `agama_id` (`agama_id`),
-  ADD KEY `kk` (`kk`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `bantuan`
+  ADD PRIMARY KEY (`bantuan_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `agama`
+-- AUTO_INCREMENT for table `bantuan`
 --
-ALTER TABLE `agama`
-  MODIFY `agama_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `daerah`
---
-ALTER TABLE `daerah`
-  MODIFY `daerah_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `penduduk`
---
-ALTER TABLE `penduduk`
-  MODIFY `penduduk_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `penduduk`
---
-ALTER TABLE `penduduk`
-  ADD CONSTRAINT `penduduk_ibfk_1` FOREIGN KEY (`daerah_id`) REFERENCES `daerah` (`daerah_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `penduduk_ibfk_2` FOREIGN KEY (`agama_id`) REFERENCES `agama` (`agama_id`) ON DELETE CASCADE;
+ALTER TABLE `bantuan`
+  MODIFY `bantuan_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
