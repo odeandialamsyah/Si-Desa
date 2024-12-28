@@ -1,4 +1,19 @@
 <?php
+    session_start();
+    // Periksa apakah cookie 'email' masih aktif
+    if (!isset($_COOKIE['email'])) {
+        // Jika cookie habis, hapus session dan arahkan ke login
+        session_unset();
+        session_destroy();
+        header("Location: login.php");
+        exit();
+    }
+    
+    // Periksa apakah session masih ada (antisipasi manual logout)
+    if (!isset($_SESSION['email'])) {
+        header("Location: login.php");
+        exit();
+    }
     // Koneksi ke database
     include 'Back-End/Koneksi/koneksi.php';
 
@@ -56,6 +71,9 @@
             width: 100% !important; /* Memastikan grafik menyesuaikan lebar kontainer */
             height: auto !important; /* Memastikan grafik menyesuaikan tinggi kontainer */
         }
+        /* .tabel-penduduk{
+            margin: 6% 17%;
+        } */
     </style>
 </head>
 <body>
@@ -132,173 +150,171 @@
                 </div>
             </div>
         </header>
-    </div>
-<main>
-    <table>
-        <tr class="large-font">
-            <td colspan="7" style="text-align: center; border:0px !important">
-                <h2><b>DATA PENDUDUK</b></h2>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="7" style="text-align: right;  border:0px !important">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPendudukModal">
-                    Tambah Penduduk
-                </button>
-            </td>
-        </tr>
-        <table class="table table-hover">
-            <thead style="background-color: #D9D9D9;">
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">NIK</th>
-                    <th scope="col">NAMA</th>
-                    <th scope="col">Jenis Kelamin</th>
-                    <th scope="col">Tempat, Tanggal Lahir</th>
-                    <th scope="col">Riwayat pekerjaan</th>
-                    <th scope="col">gaji/bulan</th>
-                    <th scope="col">Jumlah Keluarga</th>
-                    <th scope="col">Opsi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Ambil data dari tabel penduduk di database
-                include 'Back-End/Koneksi/koneksi.php';
-                $result = mysqli_query($conn, "SELECT * FROM penduduk");
-                $totalGaji = 0;
-                $no = 1;
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $totalGaji += $row['gaji'];
-                    echo "<tr>
-                    <td>" . $no++ . "</td>
-                    <td>{$row['nik']}</td>
-                    <td>{$row['nama_lengkap']}</td>
-                    <td>{$row['jenis_kelamin']}</td>
-                    <td>{$row['tempat_lahir']}, {$row['tanggal_lahir']}</td>
-                    <td>{$row['pekerjaan']}</td>
-                    <td>Rp." . number_format($row['gaji'], 0, ',', '.') . "</td>
-                    <td>{$row['jumlah_keluarga']}</td>
-                    <td>
-                        <a href='Back-End/update_penduduk.php?nik={$row['nik']}' class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></a>
-                        <a href='Back-End/delete_penduduk.php?nik={$row['nik']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
-                            <i class='fa-solid fa-trash mr-2'></i>
-                        </a>
-                        <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;'></i>
-                    </td>
-                </tr>";
-                }
-                ?>
-        </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="6">Pendapatan Rata-rata</td>
-                    <td colspan="4">Rp.
-                        <?php 
-                            // Cek apakah $no lebih dari 1 (ada data)
-                            if ($no > 1) {
-                                echo number_format($totalGaji / ($no - 1), 0, ',', '.'); 
-                            } else {
-                                echo '0'; // Tampilkan 0 jika tidak ada data
-                            }
-                        ?> perbulan
+        <main class="container">
+            <table>
+                <tr class="large-font">
+                    <td colspan="7" style="text-align: center; border:0px !important">
+                        <h2><b>DATA PENDUDUK</b></h2>
                     </td>
                 </tr>
-            </tfoot>
-        </table>
-        </tr>
-    </table>
-</main>
+                <tr>
+                    <td colspan="7" style="text-align: right;  border:0px !important">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPendudukModal">
+                            Tambah Penduduk
+                        </button>
+                    </td>
+                </tr>
+                <table class="table table-hover">
+                    <thead style="background-color: #D9D9D9;">
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">NIK</th>
+                            <th scope="col">NAMA</th>
+                            <th scope="col">Jenis Kelamin</th>
+                            <th scope="col">Tempat, Tanggal Lahir</th>
+                            <th scope="col">Riwayat pekerjaan</th>
+                            <th scope="col">gaji/bulan</th>
+                            <th scope="col">Jumlah Keluarga</th>
+                            <th scope="col">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        // Ambil data dari tabel penduduk di database
+                        include 'Back-End/Koneksi/koneksi.php';
+                        $result = mysqli_query($conn, "SELECT * FROM penduduk");
+                        $totalGaji = 0;
+                        $no = 1;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $totalGaji += $row['gaji'];
+                            echo "<tr>
+                            <td>" . $no++ . "</td>
+                            <td>{$row['nik']}</td>
+                            <td>{$row['nama_lengkap']}</td>
+                            <td>{$row['jenis_kelamin']}</td>
+                            <td>{$row['tempat_lahir']}, {$row['tanggal_lahir']}</td>
+                            <td>{$row['pekerjaan']}</td>
+                            <td>Rp." . number_format($row['gaji'], 0, ',', '.') . "</td>
+                            <td>{$row['jumlah_keluarga']}</td>
+                            <td>
+                                <a href='Back-End/update_penduduk.php?nik={$row['nik']}' class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></a>
+                                <a href='Back-End/delete_penduduk.php?nik={$row['nik']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
+                                    <i class='fa-solid fa-trash mr-2'></i>
+                                </a>
+                                <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;'></i>
+                            </td>
+                        </tr>";
+                        }
+                        ?>
+                </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">Pendapatan Rata-rata</td>
+                            <td colspan="4">Rp.
+                                <?php 
+                                    // Cek apakah $no lebih dari 1 (ada data)
+                                    if ($no > 1) {
+                                        echo number_format($totalGaji / ($no - 1), 0, ',', '.'); 
+                                    } else {
+                                        echo '0'; // Tampilkan 0 jika tidak ada data
+                                    }
+                                ?> perbulan
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                </tr>
+            </table>
+        </main>
 
-<div class="modal fade" id="addPendudukModal" tabindex="-1" aria-labelledby="addPendudukModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addPendudukModalLabel">Tambah Data Penduduk</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formAddPenduduk" method="POST" action="Back-End/proses_tambah_penduduk.php">
-                    <!-- KK -->
-                    <div class="mb-3">
-                        <label for="kk" class="form-label">KK</label>
-                        <input type="text" class="form-control" id="kk" name="kk" required>
+        <div class="modal fade" id="addPendudukModal" tabindex="-1" aria-labelledby="addPendudukModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addPendudukModalLabel">Tambah Data Penduduk</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                        <form id="formAddPenduduk" method="POST" action="Back-End/proses_tambah_penduduk.php">
+                            <!-- KK -->
+                            <div class="mb-3">
+                                <label for="kk" class="form-label">KK</label>
+                                <input type="text" class="form-control" id="kk" name="kk" required>
+                            </div>
 
-                    <!-- NIK -->
-                    <div class="mb-3">
-                        <label for="nik" class="form-label">NIK</label>
-                        <input type="text" class="form-control" id="nik" name="nik" required>
+                            <!-- NIK -->
+                            <div class="mb-3">
+                                <label for="nik" class="form-label">NIK</label>
+                                <input type="text" class="form-control" id="nik" name="nik" required>
+                            </div>
+
+                            <!-- Nama Lengkap -->
+                            <div class="mb-3">
+                                <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required>
+                            </div>
+
+                            <!-- Jenis Kelamin -->
+                            <div class="mb-3">
+                                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                                <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+
+                            <!-- Dropdown Desa -->
+                            <div class="mb-3">
+                                <label for="daerah_id" class="form-label">Desa</label>
+                                <select class="form-select" id="daerah_id" name="daerah_id" required>
+                                    <option value="">Pilih Desa</option>
+                                    <?php
+                                    // Loop data desa
+                                    while ($row = mysqli_fetch_assoc($resultDesa)) {
+                                        echo '<option value="' . $row['daerah_id'] . '">' . $row['nama_daerah'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <!-- Tanggal Lahir -->
+                            <div class="mb-3">
+                                <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                                <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required>
+                            </div>
+
+                            <!-- Tempat Lahir -->
+                            <div class="mb-3">
+                                <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                                <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" required>
+                            </div>
+
+                            <!-- Pekerjaan -->
+                            <div class="mb-3">
+                                <label for="pekerjaan" class="form-label">Pekerjaan</label>
+                                <input type="text" class="form-control" id="pekerjaan" name="pekerjaan">
+                            </div>
+
+                            <!-- Gaji -->
+                            <div class="mb-3">
+                                <label for="gaji" class="form-label">Gaji/Bulan</label>
+                                <input type="number" class="form-control" id="gaji" name="gaji" step="0.01" required>
+                            </div>
+
+                            <!-- Jumlah Keluarga -->
+                            <div class="mb-3">
+                                <label for="jumlah_keluarga" class="form-label">Jumlah Keluarga</label>
+                                <input type="number" class="form-control" id="jumlah_keluarga" name="jumlah_keluarga" required>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </form>
                     </div>
-
-                    <!-- Nama Lengkap -->
-                    <div class="mb-3">
-                        <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required>
-                    </div>
-
-                    <!-- Jenis Kelamin -->
-                    <div class="mb-3">
-                        <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                        <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                        </select>
-                    </div>
-
-                    <!-- Dropdown Desa -->
-                    <div class="mb-3">
-                        <label for="daerah_id" class="form-label">Desa</label>
-                        <select class="form-select" id="daerah_id" name="daerah_id" required>
-                            <option value="">Pilih Desa</option>
-                            <?php
-                            // Loop data desa
-                            while ($row = mysqli_fetch_assoc($resultDesa)) {
-                                echo '<option value="' . $row['daerah_id'] . '">' . $row['nama_daerah'] . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <!-- Tanggal Lahir -->
-                    <div class="mb-3">
-                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                        <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required>
-                    </div>
-
-                    <!-- Tempat Lahir -->
-                    <div class="mb-3">
-                        <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
-                        <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" required>
-                    </div>
-
-                    <!-- Pekerjaan -->
-                    <div class="mb-3">
-                        <label for="pekerjaan" class="form-label">Pekerjaan</label>
-                        <input type="text" class="form-control" id="pekerjaan" name="pekerjaan">
-                    </div>
-
-                    <!-- Gaji -->
-                    <div class="mb-3">
-                        <label for="gaji" class="form-label">Gaji/Bulan</label>
-                        <input type="number" class="form-control" id="gaji" name="gaji" step="0.01" required>
-                    </div>
-
-                    <!-- Jumlah Keluarga -->
-                    <div class="mb-3">
-                        <label for="jumlah_keluarga" class="form-label">Jumlah Keluarga</label>
-                        <input type="number" class="form-control" id="jumlah_keluarga" name="jumlah_keluarga" required>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-
 <script>
     function redirectToDetail(url) {
         window.location.href = url;

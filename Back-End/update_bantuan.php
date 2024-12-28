@@ -1,4 +1,20 @@
 <?php
+session_start();
+// Periksa apakah cookie 'email' masih aktif
+if (!isset($_COOKIE['email'])) {
+    // Jika cookie habis, hapus session dan arahkan ke login
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+
+// Periksa apakah session masih ada (antisipasi manual logout)
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include 'Koneksi/koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

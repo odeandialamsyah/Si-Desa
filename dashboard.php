@@ -135,56 +135,54 @@ if (!isset($_SESSION['email'])) {
                 </div>
             </div>
         </header>
+        <main>
+            <table>
+                <tr class="large-font">
+                    <td colspan="7" style="text-align: center;">
+                        <h2><b>DASHBOARD</b></h2>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="container mt-3">
+                <!-- Container untuk grafik bersebelahan -->
+                <div class="row">
+                    <div class="col-md-4 mb-3 d-flex">
+                        <div class="card flex-fill">
+                            <div class="card-header">
+                                Grafik Jumlah Warga Berdasarkan Klasifikasi
+                            </div>
+                            <div class="card-body">
+                                <canvas id="klasifikasiChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3 d-flex">
+                        <div class="card flex-fill">
+                            <div class="card-header">
+                                Grafik Data Dokumen Penduduk
+                            </div>
+                            <div class="card-body">
+                                <canvas id="dokumenChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3 d-flex">
+                        <div class="card flex-fill">
+                            <div class="card-header">
+                                Grafik Data Agama
+                            </div>
+                            <div class="card-body">
+                                <canvas id="agamaChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-<main>
-    <table>
-        <tr class="large-font">
-            <td colspan="7" style="text-align: center;">
-                <h2><b>DASHBOARD</b></h2>
-            </td>
-        </tr>
-    </table>
-
-    <div class="container mt-3">
-        <!-- Container untuk grafik bersebelahan -->
-        <div class="row">
-            <div class="col-md-4 mb-3 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-header">
-                        Grafik Jumlah Warga Berdasarkan Klasifikasi
-                    </div>
-                    <div class="card-body">
-                        <canvas id="klasifikasiChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-3 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-header">
-                        Grafik Data Dokumen Penduduk
-                    </div>
-                    <div class="card-body">
-                        <canvas id="dokumenChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-3 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-header">
-                        Grafik Data Agama
-                    </div>
-                    <div class="card-body">
-                        <canvas id="agamaChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>

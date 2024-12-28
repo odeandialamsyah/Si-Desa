@@ -118,73 +118,67 @@
                 </div>
             </div>
         </header>
-    </div>
-        <main>
-            <table>
+        <main class="container">
+            <table class="">
                 <tr class="large-font">
             <td colspan="7" style="text-align: center;">
                 <h2><b>DATA KLASIFIKASI</b></h2>
             </td>
-        </tr>
-                
- <tr style="background-color: #D9D9D9;">
-                    <th scope="col">No</th>
-                    <th scope="col">Klasifikasi</th>
-                    <th scope="col">Jumlah</th>
-                    <th scope="col">Range Umur</th>
-                  
-                    <th scope="col">Opsi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr onclick="redirectToDetail('detailAnggota1.html')">
-                    <td>1</td>
-                    <td>Anak-anak</td>
-                    <td>50 Orang</td>
-                    <td>0-12 Tahun</td>
-                   
-                    <td>
-                        <i class="fa-solid fa-pen-to-square mr-2" style="color: #e17833;"></i>
-                        <i class="fa-solid fa-trash mr-2" style="color: #ff0000;"></i>
-                    </td>
-                </tr>
-                <tr onclick="redirectToDetail('detailAnggota1.html')">
-                    <td>2</td>
-                    <td>Remaja</td>
-                    <td>30 Orang</td>
-                    <td>13-17 Tahun</td>
+            </tr>
                     
-                    <td>
-                        <i class="fa-solid fa-pen-to-square mr-2" style="color: #e17833;"></i>
-                        <i class="fa-solid fa-trash mr-2" style="color: #ff0000;"></i>
-                    </td>
-                </tr>
-                <tr onclick="redirectToDetail('detailAnggota1.html')">
-                    <td>3</td>
-                    <td>Dewasa</td>
-                    <td>48 Orang</td>
-                    <td>18-59 Tahun</td>
-                   
-                    <td>
-                        <i class="fa-solid fa-pen-to-square mr-2" style="color: #e17833;"></i>
-                        <i class="fa-solid fa-trash mr-2" style="color: #ff0000;"></i>
-                    </td>
-                </tr>
-                <tr onclick="redirectToDetail('detailAnggota1.html')">
-                    <td>4</td>
-                    <td>Lansia</td>
-                    <td>10 Orang</td>
-                    <td>60 Tahun ke atas</td>
-                    
-                    <td>
-                        <i class="fa-solid fa-pen-to-square mr-2" style="color: #e17833;"></i>
-                        <i class="fa-solid fa-trash mr-2" style="color: #ff0000;"></i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </main>
+            <tr style="background-color: #D9D9D9;">
+                        <th scope="col">No</th>
+                        <th scope="col">Klasifikasi</th>
+                        <th scope="col">Jumlah</th>
+                        <th scope="col">Range Umur</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                    include 'Back-End/Koneksi/koneksi.php';
 
+                    // Query untuk mendapatkan jumlah berdasarkan klasifikasi usia
+                    $query = "
+                        SELECT 
+                            CASE 
+                                WHEN TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) BETWEEN 0 AND 12 THEN 'Anak-anak'
+                                WHEN TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) BETWEEN 13 AND 17 THEN 'Remaja'
+                                WHEN TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) BETWEEN 18 AND 59 THEN 'Dewasa'
+                                WHEN TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) >= 60 THEN 'Lanjut Usia'
+                                ELSE 'Tidak Diketahui'
+                            END AS klasifikasi_usia,
+                            COUNT(*) AS jumlah
+                        FROM 
+                            penduduk
+                        GROUP BY klasifikasi_usia;
+                    ";         
+                    $result = mysqli_query($conn, $query);
+                    $no = 1;
+                    while ($data = mysqli_fetch_assoc($result)) {
+                        echo "<tr>
+                            <td>{$no}</td>
+                            <td>{$data['klasifikasi_usia']}</td>
+                            <td>{$data['jumlah']}</td>
+                            <td>";
+
+                            // Menampilkan range umur berdasarkan klasifikasi
+                            if ($data['klasifikasi_usia'] == 'Anak-anak') {
+                                echo "0 - 12 Tahun";
+                            } elseif ($data['klasifikasi_usia'] == 'Remaja') {
+                                echo "13 - 17 Tahun";
+                            } elseif ($data['klasifikasi_usia'] == 'Dewasa') {
+                                echo "18 - 59 Tahun";
+                            } elseif ($data['klasifikasi_usia'] == 'Lanjut Usia') {
+                                echo "60 Tahun ke atas";
+                            }
+                            echo "</td></tr>";
+                        $no++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </main>
+    </div>
         <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript" src="dataAnggota.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
