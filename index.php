@@ -212,9 +212,11 @@ session_start();
                 <li class="nav-item">
                     <a class="nav-link" href="#section4">VISI MISI</a>
                 </li><br>
-               
                 <li class="nav-item">
                     <a class="nav-link" href="#section5">PENDAPATAN DAN POTENSI DESA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="createLaporan.php">PENGADUAN</a>
                 </li>
             </ul>
         </div>
@@ -370,14 +372,18 @@ session_start();
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         document.querySelectorAll('nav a').forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = e.target.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            targetSection.scrollIntoView({ behavior: 'smooth' });
-          });
+            link.addEventListener('click', (e) => {
+                const targetId = e.target.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    e.preventDefault();
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
         });
-      </script>
+    </script>
 </body>
 
 </html>
