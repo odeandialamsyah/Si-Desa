@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 30, 2024 at 05:54 PM
+-- Generation Time: Jan 02, 2025 at 07:57 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -135,6 +135,7 @@ CREATE TABLE `penduduk` (
   `pekerjaan` varchar(50) DEFAULT NULL,
   `gaji` decimal(15,2) DEFAULT NULL,
   `jumlah_keluarga` int(11) DEFAULT 0,
+  `foto_diri` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -143,9 +144,9 @@ CREATE TABLE `penduduk` (
 -- Dumping data for table `penduduk`
 --
 
-INSERT INTO `penduduk` (`penduduk_id`, `daerah_id`, `agama_id`, `kk`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `jumlah_keluarga`, `created_at`, `updated_at`) VALUES
-(1, 6, NULL, '3201011234567890', '3201012345678901', 'Budi Santoso', 'Laki-laki', '1989-11-13', 'Bandung', 'Petani', '5000000.00', 4, '2024-12-26 16:00:15', '2024-12-26 16:05:59'),
-(2, 6, NULL, '3201011234567890', '3201012345678902', 'Siti Aminah', 'Perempuan', '1994-12-15', 'Jakarta', 'Guru', '4500000.00', 4, '2024-12-26 16:01:33', '2024-12-26 16:06:21');
+INSERT INTO `penduduk` (`penduduk_id`, `daerah_id`, `agama_id`, `kk`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `jumlah_keluarga`, `foto_diri`, `created_at`, `updated_at`) VALUES
+(1, 6, NULL, '3201011234567890', '3201012345678901', 'Budi Santoso', 'Laki-laki', '1989-11-13', 'Bandung', 'Petani', '5000000.00', 4, 'budi_santoso_1735800039.jpg', '2024-12-26 16:00:15', '2025-01-02 06:40:39'),
+(2, 6, NULL, '3201011234567890', '3201012345678902', 'Siti Aminah', 'Perempuan', '1994-12-15', 'Jakarta', 'Guru', '4500000.00', 4, '', '2024-12-26 16:01:33', '2024-12-26 16:06:21');
 
 -- --------------------------------------------------------
 
@@ -192,6 +193,12 @@ ALTER TABLE `laporan`
   ADD KEY `daerah_id` (`daerah_id`);
 
 --
+-- Indexes for table `penduduk`
+--
+ALTER TABLE `penduduk`
+  ADD PRIMARY KEY (`penduduk_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -212,6 +219,12 @@ ALTER TABLE `daerah`
 --
 ALTER TABLE `laporan`
   MODIFY `laporan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `penduduk`
+--
+ALTER TABLE `penduduk`
+  MODIFY `penduduk_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

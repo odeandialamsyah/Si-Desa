@@ -15,6 +15,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pekerjaan = !empty($_POST['pekerjaan']) ? $_POST['pekerjaan'] : NULL;
     $gaji = !empty($_POST['gaji']) ? $_POST['gaji'] : NULL;
     $jumlah_keluarga = !empty($_POST['jumlah_keluarga']) ? $_POST['jumlah_keluarga'] : 0;
+    
+    // Proses Upload Foto Diri
+    if (isset($_FILES['foto_diri']) && $_FILES['foto_diri']['error'] === UPLOAD_ERR_OK) {
+        $foto_diri = $_FILES['foto_diri'];
+        $target_dir = "Uploads/foto_diri/";
+
+        // Buat folder jika belum ada
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+
+        $imageFileType = strtolower(pathinfo($foto_diri['name'], PATHINFO_EXTENSION));
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+
+        if (!in_array($imageFileType, $allowed_types)) {
+            echo "<script>alert('Format file tidak valid! Hanya JPG, JPEG, PNG, dan GIF yang diizinkan.'); window.history.back();</script>";
+            exit;
+        }
+
+        // Ganti nama file dengan nama_lengkap
+        $sanitized_name = preg_replace('/[^a-zA-Z0-9_-]/', '_', strtolower($nama_lengkap));
+        $foto_name = $sanitized_name . '.' . $imageFileType;
+        $target_file = $target_dir . $foto_name;
+
+        // Pindahkan file ke folder tujuan
+        if (move_uploaded_file($foto_diri['tmp_name'], $target_file)) {
+            $foto_path = $foto_name;
+        } else {
+            echo "<script>alert('Gagal mengunggah foto diri!'); window.history.back();</script>";
+            exit;
+        }
+    } else {
+        $foto_path = NULL; // Jika tidak ada file yang diunggah
+    }
 
     // Validasi KK (16 digit angka)
     if (!preg_match('/^\d{16}$/', $kk)) {
@@ -43,13 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Query tambah data (tanpa agama_id)
     $sql = "INSERT INTO Penduduk 
-            (daerah_id, kk, nik, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir, pekerjaan, gaji, jumlah_keluarga, created_at, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+            (daerah_id, kk, nik, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir, pekerjaan, gaji, jumlah_keluarga, foto_diri, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
     // Persiapkan statement
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "isssssssdi", // Total 10 tipe data
+        "isssssssdis", // Total 10 tipe data
         $daerah_id,         // i
         $kk,                // s
         $nik,               // s
@@ -59,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tempat_lahir,      // s
         $pekerjaan,         // s
         $gaji,              // d
-        $jumlah_keluarga    // i
+        $jumlah_keluarga,   // i
+        $foto_path          // s
     );    
 
     // Eksekusi query

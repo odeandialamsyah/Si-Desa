@@ -48,18 +48,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Query untuk update data
-    $query = "UPDATE penduduk SET 
-              daerah_id = '$daerah_id',
-              kk = '$kk',
-              nama_lengkap = '$nama_lengkap', 
-              jenis_kelamin = '$jenis_kelamin',
-              tanggal_lahir = '$tanggal_lahir',
-              tempat_lahir = '$tempat_lahir',
-              pekerjaan = '$pekerjaan',
-              gaji = '$gaji',
-              jumlah_keluarga = '$jumlah_keluarga'
-              WHERE nik = '$nik'";
+    // Proses Upload Foto Diri
+    if (isset($_FILES['foto_diri']) && $_FILES['foto_diri']['error'] === UPLOAD_ERR_OK) {
+        $foto_diri = $_FILES['foto_diri'];
+        $target_dir = "Uploads/foto_diri/";
+
+        // Buat folder jika belum ada
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+
+        $imageFileType = strtolower(pathinfo($foto_diri['name'], PATHINFO_EXTENSION));
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+
+        if (!in_array($imageFileType, $allowed_types)) {
+            echo "<script>alert('Format file tidak valid! Hanya JPG, JPEG, PNG, dan GIF yang diizinkan.'); window.history.back();</script>";
+            exit();
+        }
+
+        // Ganti nama file dengan nama_lengkap dan timestamp
+        $sanitized_name = preg_replace('/[^a-zA-Z0-9_-]/', '_', strtolower($nama_lengkap));
+        $foto_name = $sanitized_name . '_' . time() . '.' . $imageFileType;
+        $target_file = $target_dir . $foto_name;
+
+        // Pindahkan file ke folder tujuan
+        if (move_uploaded_file($foto_diri['tmp_name'], $target_file)) {
+            $foto_path = $foto_name;
+
+            // Hapus foto lama jika ada
+            if (!empty($penduduk['foto_diri']) && file_exists($target_dir . $penduduk['foto_diri'])) {
+                unlink($target_dir . $penduduk['foto_diri']);
+            }
+
+            // Tambahkan kolom foto_diri ke query
+            $query = "UPDATE penduduk SET 
+                      daerah_id = '$daerah_id',
+                      kk = '$kk',
+                      nama_lengkap = '$nama_lengkap', 
+                      jenis_kelamin = '$jenis_kelamin',
+                      tanggal_lahir = '$tanggal_lahir',
+                      tempat_lahir = '$tempat_lahir',
+                      pekerjaan = '$pekerjaan',
+                      gaji = '$gaji',
+                      jumlah_keluarga = '$jumlah_keluarga',
+                      foto_diri = '$foto_path'
+                      WHERE nik = '$nik'";
+        } else {
+            echo "<script>alert('Gagal memindahkan file!'); window.history.back();</script>";
+            exit();
+        }
+    } else {
+        // Jika tidak ada file yang diunggah, gunakan query tanpa perubahan foto_diri
+        $query = "UPDATE penduduk SET 
+                  daerah_id = '$daerah_id',
+                  kk = '$kk',
+                  nama_lengkap = '$nama_lengkap', 
+                  jenis_kelamin = '$jenis_kelamin',
+                  tanggal_lahir = '$tanggal_lahir',
+                  tempat_lahir = '$tempat_lahir',
+                  pekerjaan = '$pekerjaan',
+                  gaji = '$gaji',
+                  jumlah_keluarga = '$jumlah_keluarga'
+                  WHERE nik = '$nik'";
+    }
 
     if (mysqli_query($conn, $query)) {
         echo "<script>alert('Data berhasil diupdate!'); window.location.href='../dataPenduduk.php';</script>";
@@ -80,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Update Data Penduduk</h1>
-        <form method="post" action="">
+        <form method="post" action="" enctype="multipart/form-data">
             <!-- KK -->
             <div class="mb-3">
                 <label for="kk" class="form-label">KK</label>
@@ -150,6 +201,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="mb-3">
                 <label for="jumlah_keluarga" class="form-label">Jumlah Keluarga</label>
                 <input type="number" class="form-control" id="jumlah_keluarga" name="jumlah_keluarga" value="<?php echo htmlspecialchars($penduduk['jumlah_keluarga']); ?>" required>
+            </div>
+
+            <!-- Foto Diri -->
+            <div class="mb-3">
+                <label for="foto_diri" class="form-label">Foto Diri</label>
+                <input type="file" class="form-control" id="foto_diri" name="foto_diri" accept="image/*">
+                <?php if (!empty($penduduk['foto_diri'])): ?>
+                    <p class="mt-2">Foto Saat Ini:</p>
+                    <img src="Uploads/foto_diri/<?php echo htmlspecialchars($penduduk['foto_diri']); ?>" alt="Foto Diri" style="max-width: 200px; height: auto;">
+                <?php endif; ?>
             </div>
 
             <!-- Submit Button -->

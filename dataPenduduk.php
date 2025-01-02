@@ -235,7 +235,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formAddPenduduk" method="POST" action="Back-End/proses_tambah_penduduk.php">
+                        <form id="formAddPenduduk" method="POST" action="Back-End/proses_tambah_penduduk.php" enctype="multipart/form-data">
                             <!-- KK -->
                             <div class="mb-3">
                                 <label for="kk" class="form-label">KK</label>
@@ -305,6 +305,12 @@
                             <div class="mb-3">
                                 <label for="jumlah_keluarga" class="form-label">Jumlah Keluarga</label>
                                 <input type="number" class="form-control" id="jumlah_keluarga" name="jumlah_keluarga" required>
+                            </div>
+
+                            <!-- Input Foto Diri -->
+                            <div class="mb-3">
+                                <label for="foto_diri" class="form-label">Foto Diri</label>
+                                <input type="file" class="form-control" id="foto_diri" name="foto_diri" accept="image/*" required>
                             </div>
 
                             <!-- Submit Button -->
