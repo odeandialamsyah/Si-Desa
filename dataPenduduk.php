@@ -201,7 +201,9 @@
                                 <a href='Back-End/delete_penduduk.php?nik={$row['nik']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
                                     <i class='fa-solid fa-trash mr-2'></i>
                                 </a>
+                                <a href='viewDataPenduduk.php?nik={$row['nik']}'>
                                 <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;'></i>
+                                </a>
                             </td>
                         </tr>";
                         }
