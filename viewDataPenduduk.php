@@ -104,32 +104,32 @@ $agama = mysqli_fetch_assoc($resultAgama);
         <div class="side-menu">
             <ul>
                 <li>
-                    <a href="index.html" style="text-decoration: none;">
+                    <a href="dashboard.php" style="text-decoration: none;">
                         <span class="fa fa-compass"></span>
                         <small>Dashboard</small>
                     </a>
                 </li>
                 <li>
-                    <a href="dataKlasifikasi.html" style="text-decoration: none;">
+                    <a href="dataKlasifikasi.php" style="text-decoration: none;">
                         <span class="fa fa-users"></span>
                         <small>Data Klasifikasi</small>
                     </a>
                 </li>
                
                 <li>
-                    <a href="dataPenduduk.html" class="active" style="text-decoration: none;">
+                    <a href="dataPenduduk.php" class="active" style="text-decoration: none;">
                         <span class="fa fa-user"></span>
                         <small>Data Penduduk</small>
                     </a>
                 </li>
                 <li>
-                    <a href="BantuanSosial.html" style="text-decoration: none;">
+                    <a href="BantuanSosial.php" style="text-decoration: none;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
                     </a>
                 </li>
                 <li>
-                    <a href="laporan.html" style="text-decoration: none;">
+                    <a href="laporan.php" style="text-decoration: none;">
                         <span class="fa fa-list-alt"></span>
                         <small>Laporan </small>
                     </a>

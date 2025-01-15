@@ -216,6 +216,7 @@ $no = 1;
                                 <label for="jumlah_keluarga" class="form-label">Jumlah Keluarga</label>
                                 <input type="number" class="form-control" id="jumlah_keluarga" name="jumlah_keluarga" 
                                     value="<?= isset($selectedPenduduk['jumlah_keluarga']) ? $selectedPenduduk['jumlah_keluarga'] : ''; ?>" readonly>
+                            </div>
                             <div class="mb-3">
                                 <label for="nama_bantuan" class="form-label">Nama Bantuan</label>
                                 <input type="text" class="form-control" id="nama_bantuan" name="nama_bantuan" required>
