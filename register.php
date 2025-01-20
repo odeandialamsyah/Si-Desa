@@ -47,7 +47,7 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
                                     </div>
-                                    <form class="user" action="Back-End/proses_login.php" method="POST">
+                                    <form class="user" action="Back-End/proses_register.php" method="POST">
                                         <div class="form-group">
                                             <input type="email" name="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
@@ -55,10 +55,13 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password" required>
+                                                id="password" placeholder="Password" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
-                                        <a href="register.php" class="m-3">Belum punya akun?</a>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user" name="confirm_password" id="confirm_password" placeholder="Confirm Password " required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">Register</button>
+                                        <a href="login.php" class="m-3">Sudah punya akun?</a>
                                     </form>
                                 </div>
                             </div>

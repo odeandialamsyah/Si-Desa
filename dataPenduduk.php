@@ -1,19 +1,13 @@
 <?php
     session_start();
-    // Periksa apakah cookie 'email' masih aktif
-    if (!isset($_COOKIE['email'])) {
-        // Jika cookie habis, hapus session dan arahkan ke login
-        session_unset();
-        session_destroy();
-        header("Location: login.php");
-        exit();
-    }
-    
-    // Periksa apakah session masih ada (antisipasi manual logout)
+    // Memastikan user sudah login dan memiliki session yang valid
     if (!isset($_SESSION['email'])) {
         header("Location: login.php");
         exit();
     }
+    
+    // Mendapatkan role dari session
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
     // Koneksi ke database
     include 'Back-End/Koneksi/koneksi.php';
 
@@ -100,7 +94,9 @@
                         <span class="fa fa-compass"></span>
                         <small>Dashboard</small>
                     </a>
-                </li>
+                </li>          
+                <?php
+                if ($role == 'admin') { ?>
                 <li>
                     <a href="dataKlasifikasi.php" style="text-decoration: none;">
                         <span class="fa fa-users"></span>
@@ -114,12 +110,15 @@
                         <small>Data Penduduk</small>
                     </a>
                 </li>
+                <?php } ?>
                 <li>
                     <a href="BantuanSosial.php" style="text-decoration: none;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
                     </a>
                 </li>
+                <?php
+                if ($role == 'admin') { ?>
                 <li>
                     <a href="laporan.php" style="text-decoration: none;">
                         <span class="fa fa-list-alt"></span>
@@ -138,6 +137,7 @@
                         <small>Potensi Desa</small>
                     </a>
                 </li>
+                <?php } ?>
             </ul>
         </div>
     </div>
