@@ -111,6 +111,18 @@ if (!isset($_SESSION['email'])) {
                         <small>Laporan</small>
                     </a>
                 </li>
+                <li>
+                    <a href="pendapatan.php" style="text-decoration: none;">
+                        <span class="fa fa-list-alt"></span>
+                        <small>Pendapatan Desa</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="potensi.php" style="text-decoration: none;">
+                        <span class="fa fa-list-alt"></span>
+                        <small>Potensi Desa</small>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

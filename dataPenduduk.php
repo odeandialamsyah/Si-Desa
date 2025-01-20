@@ -126,6 +126,18 @@
                         <small>Laporan</small>
                     </a>
                 </li>
+                <li>
+                    <a href="pendapatan.php" style="text-decoration: none;">
+                        <span class="fa fa-list-alt"></span>
+                        <small>Pendapatan Desa</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="potensi.php" style="text-decoration: none;">
+                        <span class="fa fa-list-alt"></span>
+                        <small>Potensi Desa</small>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -159,7 +171,7 @@
                 </tr>
                 <tr>
                     <td colspan="7" style="text-align: right;  border:0px !important">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPendudukModal">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPendapatanModal">
                             Tambah Penduduk
                         </button>
                     </td>
@@ -229,15 +241,15 @@
             </table>
         </main>
 
-        <div class="modal fade" id="addPendudukModal" tabindex="-1" aria-labelledby="addPendudukModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addPendapatanModal" tabindex="-1" aria-labelledby="addPendapatanModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addPendudukModalLabel">Tambah Data Penduduk</h5>
+                        <h5 class="modal-title" id="addPendapatanModalLabel">Tambah Data Penduduk</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formAddPenduduk" method="POST" action="Back-End/proses_tambah_penduduk.php" enctype="multipart/form-data">
+                        <form id="formAddPendapatan" method="POST" action="Back-End/proses_tambah_pendapatan.php" enctype="multipart/form-data">
                             <!-- KK -->
                             <div class="mb-3">
                                 <label for="kk" class="form-label">KK</label>

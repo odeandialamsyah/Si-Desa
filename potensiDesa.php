@@ -215,76 +215,26 @@
                         <section class="content-box" id="lowongan">
                             <div class="content-text">
                                 <div class="job-listings">
-                                    <!-- Card 1 -->
-                                    <div class="job-card card">
-                                        <img src="PW1.jpg" alt="Job 1" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Pelelangan Ikan di Ugar</p>
-                                            <p class="card-text"><small class="text-muted">18 Agustus 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <!-- Card 2 -->
-                                    <div class="job-card card">
-                                        <img src="PW2.jpg" alt="Job 2" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Modal Bagi Nelayan Perlu Disiapkan</p>
-                                            <p class="card-text"><small class="text-muted">17 September 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <!-- Card 3 -->
-                                    <div class="job-card card">
-                                        <img src="PW3.jpg" alt="Job 3" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Terdampak Pandemi Nelayan Minta Pemerintah Beli Tangkapan Mereka</p>
-                                            <p class="card-text"><small class="text-muted">07 September 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <!-- Card 4 -->
-                                    <div class="job-card card">
-                                        <img src="PW4.jpg" alt="Job 4" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Pengadaan Sarana Perikanan</p>
-                                            <p class="card-text"><small class="text-muted">17 Mei 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <!-- Card 5 -->
-                                    <div class="job-card card">
-                                        <img src="PW5.jpg" alt="Job 5" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Kegiatan Sehari-hari Masyarakat Ugar</p>
-                                            <p class="card-text"><small class="text-muted">17 September 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <!-- Card 6 -->
-                                    <div class="job-card card">
-                                        <img src="PW6.jpg" alt="Job 6" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Hasil Laut yang Melimpah di Ugar</p>
-                                            <p class="card-text"><small class="text-muted">18 September 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <!-- Additional Cards -->
-                                    <div class="job-card card">
-                                        <img src="PW1.jpg" alt="Job 7" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Panen Rumput Laut Petani Ugar Dibeli Rp 18.500 per Kilogram</p>
-                                            <p class="card-text"><small class="text-muted">18 Agustus 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <div class="job-card card">
-                                        <img src="PW2.jpg" alt="Job 8" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Pelelangan Ikan di Ugar</p>
-                                            <p class="card-text"><small class="text-muted">18 Agustus 2023</small></p>
-                                        </div>
-                                    </div>
-                                    <div class="job-card card">
-                                        <img src="PW3.jpg" alt="Job 9" class="card-img-top">
-                                        <div class="card-body">
-                                            <p class="card-text">Pelelangan Ikan di Ugar</p>
-                                            <p class="card-text"><small class="text-muted">18 Agustus 2023</small></p>
-                                        </div>
-                                    </div>
+                                <?php
+                                        include 'Back-End/Koneksi/koneksi.php';
+                                        $result = mysqli_query($conn, "SELECT * FROM potensi_desa");
+                                        if (!$result) {
+                                            die("Query error: " . mysqli_error($conn));
+                                        }
+                                        $no = 1;
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            $img_src ="Back-End/" . $row['gambar_pariwisata'];
+                                            echo"
+                                            <div class='job-card card'>
+                                                <img src='$img_src' alt='gambar potensi desa' class='card-img-top'>
+                                                <div class='card-body'>
+                                                    <p class='card-text'>{$row['nama_pariwisata']}</p>
+                                                    <p class='card-text'><small class='text-muted'>{$row['create_at']}</small></p>
+                                                </div>
+                                            </div>
+                                            ";
+                                        }
+                                    ?>
                                 </div>
                             </div>
                         </section>
