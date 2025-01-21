@@ -1,19 +1,13 @@
 <?php
 session_start();
-// Periksa apakah cookie 'email' masih aktif
-if (!isset($_COOKIE['email'])) {
-    // Jika cookie habis, hapus session dan arahkan ke login
-    session_unset();
-    session_destroy();
-    header("Location: login.php");
-    exit();
-}
-
-// Periksa apakah session masih ada (antisipasi manual logout)
+// Memastikan user sudah login dan memiliki session yang valid
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
 }
+
+// Mendapatkan role dari session
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
 
 include 'Koneksi/koneksi.php';
 

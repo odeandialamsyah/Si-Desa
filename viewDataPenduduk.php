@@ -164,8 +164,8 @@ $agama = mysqli_fetch_assoc($resultAgama);
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="dtlAdmn.html">Profile</a></li>
-                        <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                        <li><a class="dropdown-item" href="profil.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="Back-End/logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>

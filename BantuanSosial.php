@@ -127,7 +127,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <b>Admin</b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="dtlAdmn.html">Profile</a></li>
+                        <li><a class="dropdown-item" href="profil.php">Profile</a></li>
                         <li><a class="dropdown-item" href="Back-End/logout.php">Logout</a></li>
                     </ul>
                 </div>
@@ -156,13 +156,13 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <?php
                         include 'Back-End/Koneksi/koneksi.php';
                         $result = mysqli_query($conn, "
-    SELECT b.*, p.kk, p.nama_lengkap, p.jumlah_keluarga, d.nama_daerah 
-    FROM bantuan b
-    LEFT JOIN penduduk p ON b.penduduk_id = p.penduduk_id
-    LEFT JOIN daerah d ON p.daerah_id = d.daerah_id
-");
+                            SELECT b.*, p.kk, p.nama_lengkap, p.jumlah_keluarga, d.nama_daerah 
+                            FROM bantuan b
+                            LEFT JOIN penduduk p ON b.penduduk_id = p.penduduk_id
+                            LEFT JOIN daerah d ON p.daerah_id = d.daerah_id
+                        ");
 
-$no = 1;
+                        $no = 1;
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo "
                             <tr>
