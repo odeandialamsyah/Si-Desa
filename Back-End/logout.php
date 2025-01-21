@@ -6,6 +6,7 @@ setcookie('email', '', time() - 3600, '/dashboard.php'); // Cookie dihapus denga
 session_unset();
 session_destroy();
 
+
 // Arahkan ke halaman login
 header("Location: ../index.php");
 exit();

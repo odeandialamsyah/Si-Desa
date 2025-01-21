@@ -8,7 +8,6 @@ $password = $_POST['password'];
 
 // Query untuk memeriksa user berdasarkan email
 $sql = "SELECT * FROM users WHERE email = '$email'";
-
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -17,22 +16,24 @@ if ($result->num_rows > 0) {
     // Memverifikasi password dengan password yang di-hash
     if (password_verify($password, $row['password'])) {
         // Set session
-        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['user_id'] = $row['user_id'];
         $_SESSION['email'] = $row['email'];
-        $_SESSION['role'] = $row['role']; // Menyimpan role jika dibutuhkan
+        $_SESSION['role'] = $row['role'];
 
-        // Mengatur cookie untuk 15 menit
-        setcookie('email', $row['email'], time() + (15 * 60), "/");
+        // Regenerate session ID
+        session_regenerate_id(true);
 
-        // Redirect ke halaman dashboard
-        header("Location: ../dashboard.php");
+        // Redirect berdasarkan role
+        if ($row['role'] === 'admin') {
+            header("Location: ../dashboard.php");
+        } else {
+            header("Location: ../dashboardUser.php");
+        }
         exit;
     } else {
-        // Password salah
         echo "<script>alert('Email atau Password salah!'); window.location.href='../login.php';</script>";
     }
 } else {
-    // Email tidak ditemukan
     echo "<script>alert('Email atau Password salah!'); window.location.href='../login.php';</script>";
 }
 

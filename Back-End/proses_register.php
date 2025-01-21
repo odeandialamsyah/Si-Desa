@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user_id = mysqli_insert_id($conn);
 
                 // Redirect ke halaman dashboard untuk mengisi data penduduk
-                header("Location: ../dashboard.php?user_id=$user_id");
+                header("Location: ../dashboardUser.php?user_id=$user_id");
                 exit;
             } else {
                 $error = "Terjadi kesalahan. Coba lagi nanti.";

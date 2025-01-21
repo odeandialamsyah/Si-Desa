@@ -141,7 +141,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="dtlAdmn.html">Profile</a></li>
+                        <li><a class="dropdown-item" href="profil.php">Profile</a></li>
                         <li><a class="dropdown-item" href="Back-End/logout.php">Logout</a></li>
                     </ul>
                 </div>

@@ -23,6 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['nik'])) {
             unlink($target_dir . $penduduk['foto_diri']);
         }
 
+         // Hapus file NIK jika ada
+         $target_dir_nik = "Uploads/file_nik/";
+         if (!empty($penduduk['file_nik']) && file_exists($target_dir_nik . $penduduk['file_nik'])) {
+             unlink($target_dir_nik . $penduduk['file_nik']);
+         }
+ 
+         // Hapus file KK jika ada
+         $target_dir_kk = "Uploads/file_kk/";
+         if (!empty($penduduk['file_kk']) && file_exists($target_dir_kk . $penduduk['file_kk'])) {
+             unlink($target_dir_kk . $penduduk['file_kk']);
+         }
+
         // Query untuk menghapus data dari database
         $sql = "DELETE FROM Penduduk WHERE nik = ?";
         $stmt = $conn->prepare($sql);

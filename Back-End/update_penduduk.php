@@ -48,6 +48,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
+     // Direktori upload
+     $target_dir_kk = "Uploads/file_kk/";
+     $target_dir_nik = "Uploads/file_nik/";
+ 
+     // Buat folder jika belum ada
+     if (!file_exists($target_dir_kk)) {
+         mkdir($target_dir_kk, 0777, true);
+     }
+     if (!file_exists($target_dir_nik)) {
+         mkdir($target_dir_nik, 0777, true);
+     }
+ 
+     // Proses Upload File KK
+     if (isset($_FILES['file_kk']) && $_FILES['file_kk']['error'] === UPLOAD_ERR_OK) {
+         $file_kk = $_FILES['file_kk'];
+         $file_kk_ext = strtolower(pathinfo($file_kk['name'], PATHINFO_EXTENSION));
+         $file_kk_name = "kk_" . time() . ".$file_kk_ext";
+         $file_kk_path = $target_dir_kk . $file_kk_name;
+ 
+         // Pindahkan file dan hapus file lama jika ada
+         if (move_uploaded_file($file_kk['tmp_name'], $file_kk_path)) {
+             if (!empty($penduduk['file_kk']) && file_exists($target_dir_kk . $penduduk['file_kk'])) {
+                 unlink($target_dir_kk . $penduduk['file_kk']);
+             }
+             $penduduk['file_kk'] = $file_kk_name;
+         } else {
+             echo "<script>alert('Gagal mengunggah file KK!'); window.history.back();</script>";
+             exit;
+         }
+     }
+ 
+     // Proses Upload File NIK
+     if (isset($_FILES['file_nik']) && $_FILES['file_nik']['error'] === UPLOAD_ERR_OK) {
+         $file_nik = $_FILES['file_nik'];
+         $file_nik_ext = strtolower(pathinfo($file_nik['name'], PATHINFO_EXTENSION));
+         $file_nik_name = "nik_" . time() . ".$file_nik_ext";
+         $file_nik_path = $target_dir_nik . $file_nik_name;
+ 
+         // Pindahkan file dan hapus file lama jika ada
+         if (move_uploaded_file($file_nik['tmp_name'], $file_nik_path)) {
+             if (!empty($penduduk['file_nik']) && file_exists($target_dir_nik . $penduduk['file_nik'])) {
+                 unlink($target_dir_nik . $penduduk['file_nik']);
+             }
+             $penduduk['file_nik'] = $file_nik_name;
+         } else {
+             echo "<script>alert('Gagal mengunggah file NIK!'); window.history.back();</script>";
+             exit;
+         }
+     }
+
     // Proses Upload Foto Diri
     if (isset($_FILES['foto_diri']) && $_FILES['foto_diri']['error'] === UPLOAD_ERR_OK) {
         $foto_diri = $_FILES['foto_diri'];
@@ -91,7 +141,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       pekerjaan = '$pekerjaan',
                       gaji = '$gaji',
                       jumlah_keluarga = '$jumlah_keluarga',
-                      foto_diri = '$foto_path'
+                      foto_diri = '$foto_path',
+                      file_kk = '{$penduduk['file_kk']}',
+                      file_nik = '{$penduduk['file_nik']}'
                       WHERE nik = '$nik'";
         } else {
             echo "<script>alert('Gagal memindahkan file!'); window.history.back();</script>";
@@ -210,6 +262,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php if (!empty($penduduk['foto_diri'])): ?>
                     <p class="mt-2">Foto Saat Ini:</p>
                     <img src="Uploads/foto_diri/<?php echo htmlspecialchars($penduduk['foto_diri']); ?>" alt="Foto Diri" style="max-width: 200px; height: auto;">
+                <?php endif; ?>
+            </div>
+
+            <!-- File NIK -->
+            <div class="mb-3">
+                <label for="file_nik" class="form-label">Upload File NIK</label>
+                <input type="file" class="form-control" id="file_nik" name="file_nik" accept="application/pdf, image/*">
+                <?php if (!empty($penduduk['file_nik'])): ?>
+                    <p class="mt-2">File E-KTP Saat Ini: <a href="Uploads/file_nik/<?php echo htmlspecialchars($penduduk['file_nik']); ?>" target="_blank">Lihat File</a></p>
+                <?php endif; ?>
+            </div>
+
+            <!-- File KK -->
+            <div class="mb-3">
+                <label for="file_kk" class="form-label">Upload File KK</label>
+                <input type="file" class="form-control" id="file_kk" name="file_kk" accept="application/pdf, image/*">
+                <?php if (!empty($penduduk['file_kk'])): ?>
+                    <p class="mt-2">File KK Saat Ini: <a href="Uploads/file_kk/<?php echo htmlspecialchars($penduduk['file_kk']); ?>" target="_blank">Lihat File</a></p>
                 <?php endif; ?>
             </div>
 
