@@ -145,7 +145,7 @@ $agama = mysqli_fetch_assoc($resultAgama);
                         <small>Potensi Desa</small>
                     </a>
                 </li>
-                <? } ?>
+                <?php } ?>
             </ul>
         </div>
     </div>
@@ -215,6 +215,78 @@ $agama = mysqli_fetch_assoc($resultAgama);
                     </tr>
                   </tbody>
             </table>
+
+            <table>
+                <tr class="large-font"><b>DATA DOKUMEN</b></tr>
+                <tr>
+                    <table class="table table-striped">
+                        <thead style="background-color: #D9D9D9;">
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Nama Dokumen</th>
+                                <th scope="col">Jenis Dokumen</th>
+                                <th scope="col">Opsi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>E-KTP</td>
+                                <td>Identitas</td>
+                                <td>
+                                    <?php
+                                    if ($penduduk) {
+                                        $file_srcktp = "Back-End/Uploads/file_nik/" . $penduduk['file_nik'];
+                                        echo "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#previewModal' onclick='setPreview(\"$file_srcktp\")'>Preview</button>";
+                                    } else {
+                                        echo "<p>Dokumen E-KTP belum diunggah.</p>";
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>KK</td>
+                                <td>Kartu Keluarga</td>
+                                <td>
+                                <?php
+                                    if ($penduduk) {
+                                        $file_srckk = "Back-End/Uploads/file_kk/" . $penduduk['file_kk'];
+                                        echo "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#previewModal' onclick='setPreview(\"$file_srckk\")'>Preview</button>";
+                                    } else {
+                                        echo "<p>Dokumen KK belum diunggah.</p>";
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </tr>
+            </table>
+        </main>
+
+        <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="previewModalLabel">Preview Dokumen</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <iframe id="previewFrame" src="" width="100%" height="500px" style="border: none;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            function setPreview(url) {
+                // Setel atribut src iframe dengan URL yang diberikan
+                const previewFrame = document.getElementById('previewFrame');
+                previewFrame.src = url;
+            }
+        </script>
 
         <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript" src="dataAnggota.js"></script>

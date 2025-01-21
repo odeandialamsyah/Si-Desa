@@ -161,9 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <!-- Desa -->
             <div class="mb-3">
-                <label for="daerah_id" class="form-label">Desa</label>
+                <label for="daerah_id" class="form-label">Kampung</label>
                 <select class="form-select" id="daerah_id" name="daerah_id" required>
-                    <option value="">Pilih Desa</option>
+                    <option value="">Pilih Kampung</option>
                     <?php
                     while ($row = mysqli_fetch_assoc($resultDesa)) {
                         $selected = ($penduduk['daerah_id'] == $row['daerah_id']) ? 'selected' : '';

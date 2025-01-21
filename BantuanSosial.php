@@ -201,33 +201,37 @@ $no = 1;
                     </div>
                     <div class="modal-body">
                         <form action="Back-End/proses_tambah_bantuan.php"  method="POST">
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="penduduk_id" class="form-label">Nomor KK</label>
                                 <select name="penduduk_id" id="penduduk_id" class="form-select" required>
                                     <option value="" disabled selected>Pilih Nomor KK</option>
                                     <?php
-                                    $query = "SELECT penduduk_id, kk, nama_lengkap FROM penduduk";
-                                    $result = $conn->query($query);
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<option value='{$row['penduduk_id']}'>{$row['kk']} - {$row['nama_lengkap']}</option>";
-                                    }
+                                    // $query = "SELECT penduduk_id, kk, nama_lengkap FROM penduduk";
+                                    // $result = $conn->query($query);
+                                    // while ($row = $result->fetch_assoc()) {
+                                    //     echo "<option value='{$row['penduduk_id']}'>{$row['kk']} - {$row['nama_lengkap']}</option>";
+                                    // }
                                     ?>
                                 </select>
+                            </div> -->
+                            <div class="mb-3">
+                                <label for="search_kk" class="form-label">Nomor KK</label>
+                                <input type="text" class="form-control" id="search_kk" placeholder="Ketik Nomor KK atau Nama...">
+                                <input type="hidden" id="penduduk_id" name="penduduk_id"> <!-- Penduduk ID disimpan di sini -->
+                                <div class="list-group" id="search_results" style="position: absolute; z-index: 1000; width: 100%; display: none;"></div>
                             </div>
+
                             <div class="mb-3">
                                 <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" 
-                                    value="<?= isset($selectedPenduduk['nama_lengkap']) ? $selectedPenduduk['nama_lengkap'] : ''; ?>" readonly>
+                                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="nama_daerah" class="form-label">Nama Daerah</label>
-                                <input type="text" class="form-control" id="nama_daerah" name="nama_daerah" 
-                                    value="<?= isset($selectedPenduduk['nama_daerah']) ? $selectedPenduduk['nama_daerah'] : ''; ?>" readonly>
+                                <input type="text" class="form-control" id="nama_daerah" name="nama_daerah" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="jumlah_keluarga" class="form-label">Jumlah Keluarga</label>
-                                <input type="number" class="form-control" id="jumlah_keluarga" name="jumlah_keluarga" 
-                                    value="<?= isset($selectedPenduduk['jumlah_keluarga']) ? $selectedPenduduk['jumlah_keluarga'] : ''; ?>" readonly>
+                                <input type="number" class="form-control" id="jumlah_keluarga" name="jumlah_keluarga" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="nama_bantuan" class="form-label">Nama Bantuan</label>
@@ -251,7 +255,7 @@ $no = 1;
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    <!-- <script>
     document.getElementById('penduduk_id').addEventListener('change', function() {
         var penduduk_id = this.value;
 
@@ -269,7 +273,81 @@ $no = 1;
                 .catch(error => console.error('Error fetching data:', error));
         }
     });
+    </script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#search_kk').on('keyup', function() {
+        const query = $(this).val().trim(); // Ambil teks yang diketik
+
+        if (query.length > 0) {
+            $.ajax({
+                url: 'Back-End/search_kk.php', // Endpoint pencarian
+                type: 'GET',
+                data: { q: query }, // Kirim parameter pencarian
+                success: function(data) {
+                    const results = JSON.parse(data);
+                    let html = '';
+
+                    if (results.length > 0) {
+                        // Render hasil pencarian
+                        results.forEach(item => {
+                            html += `
+                                <a href="#" class="list-group-item list-group-item-action" 
+                                   data-id="${item.id}" 
+                                   data-kk="${item.kk}" 
+                                   data-nama="${item.nama_lengkap}" 
+                                   data-daerah="${item.nama_daerah}" 
+                                   data-jumlah="${item.jumlah_keluarga}">
+                                   ${item.kk} - ${item.nama_lengkap}
+                                </a>`;
+                        });
+                    } else {
+                        html = '<div class="list-group-item">Tidak ada hasil ditemukan.</div>';
+                    }
+
+                    $('#search_results').html(html).show();
+                },
+                error: function() {
+                    $('#search_results').html('<div class="list-group-item">Terjadi kesalahan.</div>').show();
+                }
+            });
+        } else {
+            $('#search_results').hide();
+        }
+    });
+
+    // Pilih hasil pencarian
+    $(document).on('click', '#search_results .list-group-item', function(e) {
+        e.preventDefault();
+
+        const pendudukId = $(this).data('id');
+        const namaLengkap = $(this).data('nama');
+        const namaDaerah = $(this).data('daerah');
+        const jumlahKeluarga = $(this).data('jumlah');
+
+        // Isi form dengan data yang dipilih
+        $('#penduduk_id').val(pendudukId);
+        $('#search_kk').val($(this).data('kk'));
+        $('#nama_lengkap').val(namaLengkap);
+        $('#nama_daerah').val(namaDaerah);
+        $('#jumlah_keluarga').val(jumlahKeluarga);
+
+        // Sembunyikan hasil pencarian
+        $('#search_results').hide();
+    });
+
+    // Sembunyikan hasil pencarian jika klik di luar
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#search_kk, #search_results').length) {
+            $('#search_results').hide();
+        }
+    });
+});
 </script>
+
+
+
 
 </body>
 </html>

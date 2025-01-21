@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query = "INSERT INTO penduduk (user_id, kk, nik, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir, foto_diri) 
               VALUES ('$user_id', '$kk', '$nik', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$tempat_lahir', '$foto_diri')";
     if (mysqli_query($conn, $query)) {
-        echo "Data penduduk berhasil disimpan!";
+        echo "Data penduduk berhasil disimpan!"; 
     } else {
         echo "Error: " . mysqli_error($conn);
     }

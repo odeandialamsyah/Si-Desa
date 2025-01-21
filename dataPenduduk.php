@@ -249,7 +249,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formAddPendapatan" method="POST" action="Back-End/proses_tambah_pendapatan.php" enctype="multipart/form-data">
+                        <form id="formAddPendapatan" method="POST" action="Back-End/proses_tambah_penduduk.php" enctype="multipart/form-data">
                             <!-- KK -->
                             <div class="mb-3">
                                 <label for="kk" class="form-label">KK</label>
@@ -279,9 +279,9 @@
 
                             <!-- Dropdown Desa -->
                             <div class="mb-3">
-                                <label for="daerah_id" class="form-label">Desa</label>
+                                <label for="daerah_id" class="form-label">Kampung</label>
                                 <select class="form-select" id="daerah_id" name="daerah_id" required>
-                                    <option value="">Pilih Desa</option>
+                                    <option value="">Pilih kampung</option>
                                     <?php
                                     // Loop data desa
                                     while ($row = mysqli_fetch_assoc($resultDesa)) {
@@ -327,6 +327,16 @@
                                 <input type="file" class="form-control" id="foto_diri" name="foto_diri" accept="image/*" required>
                             </div>
 
+                            <div class="mb-3">
+                                <label for="file_kk" class="form-label">Dokumen KK</label>
+                                <input type="file" class="form-control" name="file_kk" id="file_kk" accept=".pdf,.doc,.docx" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="file_nik" class="form-label">Dokumen KTP</label>
+                                <input type="file" class="form-control" name="file_nik" id="file_nik" accept=".pdf,.doc,.docx" required>
+                            </div>
+
                             <!-- Submit Button -->
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
@@ -339,11 +349,29 @@
     function redirectToDetail(url) {
         window.location.href = url;
     }
-</script>
-<script>
-    function redirectToDetail(url) {
-        window.location.href = url;
-    }
+
+    document.getElementById('file_nik').addEventListener('change', function () {
+        const allowedTypes = ['pdf', 'doc', 'docx'];
+        const file = this.files[0];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        if (!allowedTypes.includes(fileExtension)) {
+            alert('Hanya file PDF, DOC, atau DOCX yang diperbolehkan untuk NIK!');
+            this.value = ''; // Reset input
+        }
+    });
+
+    document.getElementById('file_kk').addEventListener('change', function () {
+        const allowedTypes = ['pdf', 'doc', 'docx'];
+        const file = this.files[0];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        if (!allowedTypes.includes(fileExtension)) {
+            alert('Hanya file PDF, DOC, atau DOCX yang diperbolehkan untuk KK!');
+            this.value = ''; // Reset input
+        }
+    });
+
 
     // document.getElementById('formAddPenduduk').addEventListener('submit', function(event) {
     //     event.preventDefault();

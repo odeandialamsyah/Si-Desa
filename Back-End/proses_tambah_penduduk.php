@@ -50,6 +50,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $foto_path = NULL; // Jika tidak ada file yang diunggah
     }
 
+    // Proses Upload File NIK
+    if (isset($_FILES['file_nik']) && $_FILES['file_nik']['error'] === UPLOAD_ERR_OK) {
+        $file_nik = $_FILES['file_nik'];
+        $target_dir_nik = "Uploads/file_nik/";
+
+        // Buat folder jika belum ada
+        if (!file_exists($target_dir_nik)) {
+            mkdir($target_dir_nik, 0777, true);
+        }
+
+        $fileExtension = strtolower(pathinfo($file_nik['name'], PATHINFO_EXTENSION));
+        $allowed_types = ['pdf', 'doc', 'docx'];
+
+        if (!in_array($fileExtension, $allowed_types)) {
+            echo "<script>alert('Format file tidak valid untuk file NIK! Hanya PDF, DOC, dan DOCX yang diizinkan.'); window.history.back();</script>";
+            exit;
+        }
+
+        $file_nik_name = preg_replace('/[^a-zA-Z0-9_-]/', '_', strtolower($nama_lengkap)) . "_nik." . $fileExtension;
+        $target_file_nik = $target_dir_nik . $file_nik_name;
+
+        if (move_uploaded_file($file_nik['tmp_name'], $target_file_nik)) {
+            $file_nik_path = $file_nik_name;
+        } else {
+            echo "<script>alert('Gagal mengunggah file NIK!'); window.history.back();</script>";
+            exit;
+        }
+    } else {
+        $file_nik_path = NULL; // Jika tidak ada file yang diunggah
+    }
+
+    // Proses Upload File KK
+    if (isset($_FILES['file_kk']) && $_FILES['file_kk']['error'] === UPLOAD_ERR_OK) {
+        $file_kk = $_FILES['file_kk'];
+        $target_dir_kk = "Uploads/file_kk/";
+
+        // Buat folder jika belum ada
+        if (!file_exists($target_dir_kk)) {
+            mkdir($target_dir_kk, 0777, true);
+        }
+
+        $fileExtension = strtolower(pathinfo($file_kk['name'], PATHINFO_EXTENSION));
+        $allowed_types = ['pdf', 'doc', 'docx'];
+
+        if (!in_array($fileExtension, $allowed_types)) {
+            echo "<script>alert('Format file tidak valid untuk file KK! Hanya PDF, DOC, dan DOCX yang diizinkan.'); window.history.back();</script>";
+            exit;
+        }
+
+        $file_kk_name = preg_replace('/[^a-zA-Z0-9_-]/', '_', strtolower($nama_lengkap)) . "_kk." . $fileExtension;
+        $target_file_kk = $target_dir_kk . $file_kk_name;
+
+        if (move_uploaded_file($file_kk['tmp_name'], $target_file_kk)) {
+            $file_kk_path = $file_kk_name;
+        } else {
+            echo "<script>alert('Gagal mengunggah file KK!'); window.history.back();</script>";
+            exit;
+        }
+    } else {
+        $file_kk_path = NULL; // Jika tidak ada file yang diunggah
+    }
+
+
     // Validasi KK (16 digit angka)
     if (!preg_match('/^\d{16}$/', $kk)) {
         echo "<script>alert('Nomor KK harus terdiri dari 16 digit angka!'); window.history.back();</script>";
@@ -77,13 +140,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Query tambah data (tanpa agama_id)
     $sql = "INSERT INTO Penduduk 
-            (daerah_id, kk, nik, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir, pekerjaan, gaji, jumlah_keluarga, foto_diri, created_at, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+            (daerah_id, kk, nik, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir, pekerjaan, gaji, jumlah_keluarga, foto_diri, file_nik, file_kk, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
     // Persiapkan statement
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "isssssssdis", // Total 10 tipe data
+        "isssssssdisss", // Total 12 tipe data
         $daerah_id,         // i
         $kk,                // s
         $nik,               // s
@@ -94,7 +157,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pekerjaan,         // s
         $gaji,              // d
         $jumlah_keluarga,   // i
-        $foto_path          // s
+        $foto_path,         // s
+        $file_nik_path,     // s
+        $file_kk_path       // s
     );    
 
     // Eksekusi query
