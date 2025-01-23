@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+include 'Back-End/Koneksi/koneksi.php';
+
+$query = "SELECT * FROM content ORDER BY content_id DESC LIMIT 1";
+$result = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -286,16 +292,11 @@ session_start();
             <div class="card-body">
     <div class="row">
         <div class="col-md-4">
-            <img src="img/ftKplDesa.jpeg" alt="Kepala Desa" class="img-fluid rounded mb-3">
+            <img src="uploads/<?php echo htmlspecialchars($row['photo']); ?>" alt="Kepala Desa" class="img-fluid rounded mb-3">
         </div>
         <div class="col-md-8">
-            <h5 class="text-left">Muhamad Tahir, Kepala Desa Kampung Ugar</h5>
-            <p class="text-left">Selamat datang di Kampung Ugar, tempat di mana tradisi bertemu dengan inovasi. Sebagai Kepala Desa, saya berkomitmen untuk terus meningkatkan pelayanan kepada seluruh warga dan memajukan Kampung Ugar dengan semangat kebersamaan. Kami akan menjaga dan melestarikan kearifan lokal yang telah diwariskan oleh leluhur kami, sekaligus memanfaatkan potensi alam yang melimpah untuk kesejahteraan bersama.</p>
-
-            <p class="text-left">Kampung Ugar memiliki kekayaan budaya dan sumber daya alam yang luar biasa, mulai dari wisata bahari hingga keindahan goa-goa yang menyimpan sejarah panjang peradaban desa ini. Dengan dukungan dari seluruh masyarakat, kita akan menciptakan lingkungan yang harmonis dan sejahtera. Mari bersama-sama kita wujudkan Kampung Ugar yang lebih maju, aman, dan menjadi teladan bagi desa-desa lainnya di Indonesia.</p>
-
-            <p class="text-left">Saya mengajak seluruh warga untuk terus bersatu dalam upaya membangun desa kita tercinta ini. Dengan kerja keras dan doa, saya yakin bahwa Kampung Ugar akan terus berkembang dan memberikan kehidupan yang lebih baik bagi seluruh warganya. Terima kasih atas kepercayaan dan dukungan yang telah diberikan. Semoga kita semua selalu diberkahi dan dilindungi oleh Tuhan Yang Maha Esa.</p>
-        </div>
+            <h5 class="text-left"><?php echo nl2br(htmlspecialchars($row['Judul'])); ?></h5>
+            <p class="text-left"><?php echo nl2br(htmlspecialchars($row['greeting'])); ?></p>
     </div>
 </div>
 
@@ -312,15 +313,9 @@ session_start();
             </div>
             <div class="card-body">
                 <h4>Visi</h4>
-                <p>Menjadikan Kampung Ugar sebagai desa wisata unggulan yang berkelanjutan dengan mengedepankan
-                    pelestarian budaya dan lingkungan.</p>
+                <p class="text-left ml-5"><?php echo nl2br(htmlspecialchars($row['visi'])); ?></p>
                 <h4>Misi</h4>
-                <ul>
-                    <li>Mengembangkan potensi wisata bahari dan sejarah secara berkelanjutan.</li>
-                    <li>Meningkatkan kesejahteraan masyarakat melalui pengelolaan sumber daya alam yang bijaksana.</li>
-                    <li>Mendorong partisipasi aktif masyarakat dalam pelestarian budaya dan lingkungan.</li>
-                    <li>Meningkatkan kualitas infrastruktur untuk mendukung pariwisata dan ekonomi lokal.</li>
-                </ul>
+                <p class="text-left ml-5" ><?php echo nl2br(htmlspecialchars($row['misi'])); ?></p>
             </div>
         </div>
             

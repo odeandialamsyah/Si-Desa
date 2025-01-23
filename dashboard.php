@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 // Mendapatkan role dari session
-$role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : 'admin';
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,8 +81,6 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                             <small>Dashboard</small>
                         </a>
                     </li>              
-                    <?php
-                    if ($role == 'admin') { ?>
                     <li>
                         <a href="dataKlasifikasi.php" style="text-decoration: none;">
                             <span class="fa fa-users"></span>
@@ -95,15 +93,18 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                             <small>Data Penduduk</small>
                         </a>
                     </li>
-                <?php } ?>
                 <li>
                     <a href="BantuanSosial.php" style="text-decoration: none;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
                     </a>
                 </li>
-                <?php
-                 if ($role == 'admin') {  ?>
+                <li>
+                    <a href="konten.php" style="text-decoration: none;">
+                        <span class="fa fa-list-alt"></span>
+                        <small>Konten</small>
+                    </a>
+                </li>
                 <li>
                     <a href="laporan.php" style="text-decoration: none;">
                         <span class="fa fa-list-alt"></span>
@@ -122,7 +123,6 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <small>Potensi Desa</small>
                     </a>
                 </li>
-                <?php } ?>
             </ul>
         </div>
     </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 21, 2025 at 02:34 PM
+-- Generation Time: Jan 23, 2025 at 02:01 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.8
 
@@ -54,19 +54,46 @@ INSERT INTO `agama` (`agama_id`, `nama_agama`, `created_at`, `updated_at`) VALUE
 
 CREATE TABLE `bantuan` (
   `bantuan_id` int NOT NULL,
+  `user_id` int DEFAULT NULL,
   `nama_bantuan` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `jenis_bantuan` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `penduduk_id` int DEFAULT NULL
+  `status` enum('pending','approved','rejected') COLLATE utf8mb4_general_ci DEFAULT 'pending',
+  `penduduk_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `bantuan`
 --
 
-INSERT INTO `bantuan` (`bantuan_id`, `nama_bantuan`, `jenis_bantuan`, `created_at`, `updated_at`, `penduduk_id`) VALUES
-(7, 'sembako', 'Uang Tunai', '2024-12-28 02:54:37', '2024-12-28 02:54:37', 1);
+INSERT INTO `bantuan` (`bantuan_id`, `user_id`, `nama_bantuan`, `jenis_bantuan`, `created_at`, `updated_at`, `status`, `penduduk_id`) VALUES
+(9, NULL, 'mobil', 'Uang Tunai', '2025-01-23 11:38:51', '2025-01-23 11:42:16', 'approved', 5),
+(12, 6, 'pupuk', 'Barang', '2025-01-23 13:34:06', '2025-01-23 13:34:06', 'pending', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `content`
+--
+
+CREATE TABLE `content` (
+  `content_id` int NOT NULL,
+  `Judul` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `greeting` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `visi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `misi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `content`
+--
+
+INSERT INTO `content` (`content_id`, `Judul`, `photo`, `greeting`, `visi`, `misi`, `created_at`, `updated_at`) VALUES
+(6, 'Muhamad Tahir, Kepala Desa Kampung Ugar', 'ftKplDesa.jpeg', 'Selamat datang di Kampung Ugar, tempat di mana tradisi bertemu dengan inovasi. Sebagai Kepala Desa, saya berkomitmen untuk terus meningkatkan pelayanan kepada seluruh warga dan memajukan Kampung Ugar dengan semangat kebersamaan. Kami akan menjaga dan melestarikan kearifan lokal yang telah diwariskan oleh leluhur kami, sekaligus memanfaatkan potensi alam yang melimpah untuk kesejahteraan bersama. \r\n\r\nKampung Ugar memiliki kekayaan budaya dan sumber daya alam yang luar biasa, mulai dari wisata bahari hingga keindahan goa-goa yang menyimpan sejarah panjang peradaban desa ini. Dengan dukungan dari seluruh masyarakat, kita akan menciptakan lingkungan yang harmonis dan sejahtera. Mari bersama-sama kita wujudkan Kampung Ugar yang lebih maju, aman, dan menjadi teladan bagi desa-desa lainnya di Indonesia. \r\n\r\nSaya mengajak seluruh warga untuk terus bersatu dalam upaya membangun desa kita tercinta ini. Dengan kerja keras dan doa, saya yakin bahwa Kampung Ugar akan terus berkembang dan memberikan kehidupan yang lebih baik bagi seluruh warganya. Terima kasih atas kepercayaan dan dukungan yang telah diberikan. Semoga kita semua selalu diberkahi dan dilindungi oleh Tuhan Yang Maha Esa.', 'Menjadikan Kampung Ugar sebagai desa wisata unggulan yang berkelanjutan dengan mengedepankan pelestarian budaya dan lingkungan.', '•	Meningkatkan kesejahteraan masyarakat melalui pengelolaan sumber daya alam yang bijaksana.\r\n•	Mendorong partisipasi aktif masyarakat dalam pelestarian budaya dan lingkungan.\r\n•	Meningkatkan kualitas infrastruktur untuk mendukung pariwisata dan ekonomi lokal.', '2025-01-23 07:33:36', '2025-01-23 07:40:41');
 
 -- --------------------------------------------------------
 
@@ -161,9 +188,8 @@ CREATE TABLE `penduduk` (
 
 INSERT INTO `penduduk` (`penduduk_id`, `user_id`, `daerah_id`, `agama_id`, `kk`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `jumlah_keluarga`, `foto_diri`, `created_at`, `updated_at`, `file_nik`, `file_kk`) VALUES
 (1, NULL, 6, 1, '3201011234567890', '3201012345678901', 'Budi Santoso', 'Laki-laki', '1989-11-13', 'Bandung', 'Petani', '5000000.00', 4, 'budi_santoso_1735800039.jpg', '2024-12-26 16:00:15', '2025-01-21 12:34:03', NULL, NULL),
-(2, NULL, 6, 1, '3201011234567890', '3201012345678902', 'Siti Aminah', 'Perempuan', '1994-12-15', 'Jakarta', 'Guru', '4500000.00', 4, '', '2024-12-26 16:01:33', '2025-01-21 12:33:54', NULL, NULL),
 (4, NULL, 12, 1, '1321091111234566', '1321091111234467', 'ode andi', 'Laki-laki', '2005-03-02', 'bandung', 'petani', '2000000.00', 2, 'ode_andi.jpg', '2025-01-21 06:38:47', '2025-01-21 12:33:41', 'ode_andi_nik.pdf', 'ode_andi_kk.pdf'),
-(5, 6, 12, 1, '1432689703184923', '1432689703184924', 'ode andi alamsyah', 'Laki-laki', '2007-03-02', 'busoa', 'backend', '1000000.00', 2, 'ode_andi_alamsyah.jpg', '2025-01-21 12:21:39', '2025-01-21 12:33:19', 'ode_andi_alamsyah_nik.pdf', 'ode_andi_alamsyah_kk.pdf');
+(5, 6, 12, 1, '1432689703184923', '1432689703184924', 'ode andi alamsyah', 'Laki-laki', '2007-03-02', 'busoa', 'backend', '1000000.00', 2, 'ode_andi_alamsyah.jpg', '2025-01-21 12:21:39', '2025-01-23 12:48:16', 'ode_andi_alamsyah_nik.pdf', 'ode_andi_alamsyah_kk.pdf');
 
 -- --------------------------------------------------------
 
@@ -216,7 +242,14 @@ INSERT INTO `users` (`user_id`, `email`, `password`, `created_at`, `updated_at`,
 -- Indexes for table `bantuan`
 --
 ALTER TABLE `bantuan`
-  ADD PRIMARY KEY (`bantuan_id`);
+  ADD PRIMARY KEY (`bantuan_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `content`
+--
+ALTER TABLE `content`
+  ADD PRIMARY KEY (`content_id`);
 
 --
 -- Indexes for table `daerah`
@@ -264,7 +297,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bantuan`
 --
 ALTER TABLE `bantuan`
-  MODIFY `bantuan_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `bantuan_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `content`
+--
+ALTER TABLE `content`
+  MODIFY `content_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `daerah`
@@ -305,6 +344,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `bantuan`
+--
+ALTER TABLE `bantuan`
+  ADD CONSTRAINT `bantuan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `laporan`

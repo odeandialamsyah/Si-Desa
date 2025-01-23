@@ -69,8 +69,6 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <small>Dashboard</small>
                     </a>
                 </li>
-                <?php
-                 if ($role == 'admin') {  ?>
                 <li>
                     <a href="dataKlasifikasi.php" style="text-decoration: none;">
                         <span class="fa fa-users"></span>
@@ -84,15 +82,18 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <small>Data Penduduk</small>
                     </a>
                 </li>
-                <?php } ?>
                 <li>
                     <a href="BantuanSosial.php" style="text-decoration: none;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
                     </a>
                 </li>
-                <?php
-                 if ($role == 'admin') {  ?>
+                <li>
+                    <a href="konten.php" style="text-decoration: none;">
+                        <span class="fa fa-list-alt"></span>
+                        <small>Konten</small>
+                    </a>
+                </li>
                 <li>
                     <a href="laporan.php" style="text-decoration: none;">
                         <span class="fa fa-list-alt"></span>
@@ -111,7 +112,6 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <small>Potensi Desa</small>
                     </a>
                 </li>
-                <?php } ?>
             </ul>
         </div>
     </div>
@@ -148,7 +148,8 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                             <th scope="col">RT / RW</th>
                             <th scope="col">Jumlah Keluarga</th>
                             <th scope="col">Bantuan</th>
-                            <th scope="col">Jenis Bantuan</th>
+                            <th scope="col">Jenis Bantuan</th>                            
+                            <th scope="col">Action</th>
                             <th scope="col">Opsi</th>
                         </tr>
                     </thead>
@@ -174,7 +175,27 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                                 <td>{$row['nama_bantuan']}</td>
                                 <td>{$row['jenis_bantuan']}</td>
                                 <td>
-                                    <a href='Back-End/update_bantuan.php?bantuan_id={$row['bantuan_id']}' onclick='return confirm(\"Apakah Anda yakin ingin mengedit data ini?\") class='text-danger'>
+                                    <form action='Back-End/update_status.php' method='POST'>
+                                        <input type='hidden' name='bantuan_id' value='{$row['bantuan_id']}'>
+                                        <select name='status' class='form-select' onchange='this.form.submit()'>
+                                            <option value='pending' " . ($row['status'] == 'pending' ? 'selected' : '') . ">Pending</option>
+                                            <option value='approved' " . ($row['status'] == 'approved' ? 'selected' : '') . ">Approved</option>
+                                            <option value='rejected' " . ($row['status'] == 'rejected' ? 'selected' : '') . ">Rejected</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href='#' 
+                                    class='btn-edit' 
+                                        data-id='{$row['bantuan_id']}' 
+                                        data-kk='{$row['kk']}' 
+                                        data-nama='{$row['nama_lengkap']}' 
+                                        data-daerah='{$row['nama_daerah']}' 
+                                        data-jumlah='{$row['jumlah_keluarga']}' 
+                                        data-bantuan='{$row['nama_bantuan']}' 
+                                        data-jenis='{$row['jenis_bantuan']}' 
+                                        data-bs-toggle='modal' 
+                                        data-bs-target='#editModal'>
                                         <i class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></i>
                                     </a>
                                     <a href='Back-End/delete_bantuan.php?bantuan_id={$row['bantuan_id']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
@@ -251,29 +272,57 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                 </div>
             </div>
         </div>
+        <!-- Modal Edit Bantuan -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Bantuan Sosial</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="Back-End/update_bantuan.php" method="POST">
+                        <div class="modal-body">
+                            <input type="hidden" id="edit_bantuan_id" name="bantuan_id">
+                            <div class="mb-3">
+                                <label for="edit_kk" class="form-label">Nomor KK</label>
+                                <input type="text" class="form-control" id="edit_kk" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_nama_lengkap" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="edit_nama_lengkap" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_nama_daerah" class="form-label">Nama Daerah</label>
+                                <input type="text" class="form-control" id="edit_nama_daerah" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_jumlah_keluarga" class="form-label">Jumlah Keluarga</label>
+                                <input type="text" class="form-control" id="edit_jumlah_keluarga" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_nama_bantuan" class="form-label">Nama Bantuan</label>
+                                <input type="text" class="form-control" id="edit_nama_bantuan" name="nama_bantuan" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_jenis_bantuan" class="form-label">Jenis Bantuan</label>
+                                <select class="form-control" id="edit_jenis_bantuan" name="jenis_bantuan" required>
+                                    <option value="Uang Tunai">Uang Tunai</option>
+                                    <option value="Barang">Barang</option>
+                                    <option value="Jasa">Jasa</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- <script>
-    document.getElementById('penduduk_id').addEventListener('change', function() {
-        var penduduk_id = this.value;
-
-        // Periksa jika penduduk_id tidak kosong
-        if (penduduk_id) {
-            // Menggunakan fetch untuk membuat request AJAX
-            fetch('Back-End/get_penduduk_data.php?penduduk_id=' + penduduk_id)
-                .then(response => response.json())
-                .then(data => {
-                    // Isi field dengan data yang diterima
-                    document.getElementById('nama_lengkap').value = data.nama_lengkap || '';
-                    document.getElementById('nama_daerah').value = data.nama_daerah || '';
-                    document.getElementById('jumlah_keluarga').value = data.jumlah_keluarga || '';
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
-    });
-    </script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -344,10 +393,29 @@ $(document).ready(function() {
         }
     });
 });
+
+$(document).ready(function() {
+    $('.btn-edit').on('click', function() {
+        // Ambil data dari atribut tombol
+        const bantuanId = $(this).data('id');
+        const kk = $(this).data('kk');
+        const nama = $(this).data('nama');
+        const daerah = $(this).data('daerah');
+        const jumlah = $(this).data('jumlah');
+        const bantuan = $(this).data('bantuan');
+        const jenis = $(this).data('jenis');
+
+        // Isi data ke dalam form modal
+        $('#editModal #edit_bantuan_id').val(bantuanId);
+        $('#editModal #edit_kk').val(kk);
+        $('#editModal #edit_nama_lengkap').val(nama);
+        $('#editModal #edit_nama_daerah').val(daerah);
+        $('#editModal #edit_jumlah_keluarga').val(jumlah);
+        $('#editModal #edit_nama_bantuan').val(bantuan);
+        $('#editModal #edit_jenis_bantuan').val(jenis);
+    });
+});
+
 </script>
-
-
-
-
 </body>
 </html>
