@@ -209,12 +209,29 @@
                             <td>Rp." . number_format($row['gaji'], 0, ',', '.') . "</td>
                             <td>{$row['jumlah_keluarga']}</td>
                             <td>
-                                <a href='Back-End/update_penduduk.php?nik={$row['nik']}' class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></a>
-                                <a href='Back-End/delete_penduduk.php?nik={$row['nik']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
-                                    <i class='fa-solid fa-trash mr-2'></i>
+                                <a href='#' class='btn btn-warning btn-sm btn-edit' 
+                                data-bs-toggle='modal' 
+                                data-bs-target='#editPendudukModal' 
+                                data-id='{$row['nik']}' 
+                                data-kk='{$row['kk']}' 
+                                data-nama='{$row['nama_lengkap']}'
+                                data-jenis_kelamin='{$row['jenis_kelamin']}'
+                                data-tempat_lahir='{$row['tempat_lahir']}'
+                                data-tanggal_lahir='{$row['tanggal_lahir']}'
+                                data-pekerjaan='{$row['pekerjaan']}'
+                                data-gaji='{$row['gaji']}'
+                                data-jumlah_keluarga='{$row['jumlah_keluarga']}'
+                                data-daerah='{$row['daerah_id']}'
+                                data-foto='{$row['foto_diri']}'
+                                data-filekk='{$row['file_kk']}'
+                                data-filenik='{$row['file_nik']}'>
+                                edit
                                 </a>
-                                <a href='viewDataPenduduk.php?nik={$row['nik']}'>
-                                <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;'></i>
+                                <a href='Back-End/delete_penduduk.php?nik={$row['nik']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='btn btn-danger btn-sm'>
+                                    delete
+                                </a>
+                                <a href='viewDataPenduduk.php?nik={$row['nik']}' class='btn btn-primary btn-sm'>
+                                    view
                                 </a>
                             </td>
                         </tr>";
@@ -344,6 +361,94 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="editPendudukModal" tabindex="-1" aria-labelledby="editPendudukModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPendudukModalLabel">Edit Data Penduduk</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formEditPenduduk" method="POST" action="Back-End/update_penduduk.php">
+                            <input type="hidden" id="editNik" name="nik">
+                            <input type="hidden" id="editKk" name="kk">
+
+                            <div class="mb-3">
+                                <label for="editNamaLengkap" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="editNamaLengkap" name="nama_lengkap" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editJenisKelamin" class="form-label">Jenis Kelamin</label>
+                                <select class="form-select" id="editJenisKelamin" name="jenis_kelamin" required>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editDaerah" class="form-label">Daerah</label>
+                                <select class="form-select" id="editDaerah" name="daerah_id">
+                                    <option value="">Pilih Daerah</option>
+                                    <?php
+                                    mysqli_data_seek($resultDesa, 0); // Reset pointer untuk loop ulang
+                                    while ($row = mysqli_fetch_assoc($resultDesa)) {
+                                        echo '<option value="' . $row['daerah_id'] . '">' . $row['nama_daerah'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editTempatLahir" class="form-label">Tempat Lahir</label>
+                                <input type="text" class="form-control" id="editTempatLahir" name="tempat_lahir" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editTanggalLahir" class="form-label">Tanggal Lahir</label>
+                                <input type="date" class="form-control" id="editTanggalLahir" name="tanggal_lahir" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editPekerjaan" class="form-label">Pekerjaan</label>
+                                <input type="text" class="form-control" id="editPekerjaan" name="pekerjaan">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editGaji" class="form-label">Gaji</label>
+                                <input type="number" class="form-control" id="editGaji" name="gaji">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editJumlahKeluarga" class="form-label">Jumlah Keluarga</label>
+                                <input type="number" class="form-control" id="editJumlahKeluarga" name="jumlah_keluarga">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editFotoDiri" class="form-label">Foto Diri</label>
+                                <input type="file" class="form-control" id="editFotoDiri" name="foto_diri" accept="image/*">
+                                <img id="previewFotoDiri" src="" alt="Foto Diri" class="img-thumbnail mt-2" style="max-height: 150px;">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editFileKK" class="form-label">File Kartu Keluarga (KK)</label>
+                                <input type="file" class="form-control" id="editFileKK" name="file_kk" accept=".pdf">
+                                <a id="previewFileKK" href="#" target="_blank" class="d-block mt-2">Lihat File KK</a>
+                                <small id="fileKKMessage" class="text-danger d-none">File KK tidak ditemukan!</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editFileNIK" class="form-label">File KTP (NIK)</label>
+                                <input type="file" class="form-control" id="editFileNIK" name="file_nik" accept=".pdf">
+                                <a id="previewFileNIK" href="#" target="_blank" class="d-block mt-2">Lihat File NIK</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 <script>
     function redirectToDetail(url) {
@@ -381,6 +486,37 @@
     //     var modal = bootstrap.Modal.getInstance(document.getElementById('addPendudukModal'));
     //     modal.hide();
     // });
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function () {
+            const modal = document.querySelector('#editPendudukModal');
+            
+            // Ambil data dari atribut tombol
+            modal.querySelector('#editNik').value = this.dataset.id;
+            modal.querySelector('#editKk').value = this.dataset.kk;
+            modal.querySelector('#editNamaLengkap').value = this.dataset.nama;
+            modal.querySelector('#editJenisKelamin').value = this.dataset.jenis_kelamin;
+            modal.querySelector('#editTempatLahir').value = this.dataset.tempat_lahir;
+            modal.querySelector('#editTanggalLahir').value = this.dataset.tanggal_lahir;
+            modal.querySelector('#editPekerjaan').value = this.dataset.pekerjaan;
+            modal.querySelector('#editGaji').value = this.dataset.gaji;
+            modal.querySelector('#editJumlahKeluarga').value = this.dataset.jumlah_keluarga;
+            modal.querySelector('#editDaerah').value = this.dataset.daerah;
+
+            // Path untuk file
+            const fotoDiri = this.dataset.foto;
+            const fileKK = this.dataset.filekk;
+            const fileNIK = this.dataset.filenik;
+
+            const fotoDiriPath = `Back-End/uploads/foto_diri/${fotoDiri}`;
+            const fileKKPath = `Back-End/uploads/file_kk/${fileKK}`;
+            const fileNIKPath = `Back-End/uploads/file_nik/${fileNIK}`;
+
+            // Load preview
+            modal.querySelector('#previewFotoDiri').src = fotoDiriPath;
+            modal.querySelector('#previewFileKK').href = fileKKPath;
+            modal.querySelector('#previewFileNIK').href = fileNIKPath;
+        });
+    });
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

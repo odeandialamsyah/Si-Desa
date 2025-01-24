@@ -263,7 +263,7 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
         <main>
             <table style="font-size: 12px;">
                 <tr class="large-font">
-                    <a href="dataPenduduk.php" style="color: black; text-decoration: none;">
+                    <a href="profil.php" style="color: black; text-decoration: none;">
                             <i class="fas fa-caret-left mr-2" style="color: #000000; font-size: 15px;"></i></a>
                     <b>DATA PENDUDUK</b></tr>
                 <tr>

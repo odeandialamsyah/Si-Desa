@@ -80,7 +80,7 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
 
         <div class="side-content">
             <div class="profile">
-                <div class="profile-img bg-img" style="background-image: url('img/user.jpg');"></div>
+                <div class="profile-img bg-img" style="background-image: url('img/ftC1.jpg');"></div>
                 <h4 style="color: white;"><b>Nama Pengguna</b></h4>
             </div>
         </div>
