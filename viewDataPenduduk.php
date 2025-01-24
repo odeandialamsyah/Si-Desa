@@ -11,24 +11,36 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
 
 include 'Back-End/Koneksi/koneksi.php';
 
-// Ambil NIK dari URL
-$nik = $_GET['nik'];
-$nik = mysqli_real_escape_string($conn, $nik);
+if (isset($_GET['nik'])) {
+    // Ambil NIK dari URL dan lakukan sanitasi untuk menghindari SQL Injection
+    $nik = mysqli_real_escape_string($conn, $_GET['nik']);
 
-// Query untuk mendapatkan data penduduk
-$query = "SELECT * FROM penduduk WHERE nik = '$nik'";
-$result = mysqli_query($conn, $query);
-$penduduk = mysqli_fetch_assoc($result);
+    // Query untuk mendapatkan data penduduk sekaligus daerah dan agama
+    $query = "SELECT 
+            penduduk.*, 
+            daerah.nama_daerah, 
+            agama.nama_agama
+        FROM 
+            penduduk
+        LEFT JOIN daerah ON penduduk.daerah_id = daerah.daerah_id
+        LEFT JOIN agama ON penduduk.agama_id = agama.agama_id
+        WHERE 
+            penduduk.nik = '$nik'
+    ";
+    $result = mysqli_query($conn, $query);
 
-// Query untuk mendapatkan data desa
-$queryDesa = "SELECT daerah_id, nama_daerah FROM daerah";
-$resultDesa = mysqli_query($conn, $queryDesa);
-$desa = mysqli_fetch_assoc($resultDesa);
+    // Validasi hasil query
+    if (!$result) {
+        die("Query gagal: " . mysqli_error($conn));
+    }
 
-// Query untuk mendapatkan data agama
-$queryAgama = "SELECT agama_id, nama_agama FROM agama";
-$resultAgama = mysqli_query($conn, $queryAgama);
-$agama = mysqli_fetch_assoc($resultAgama);
+    // Ambil data penduduk beserta data daerah dan agama
+    $penduduk = mysqli_fetch_assoc($result);
+
+} else {
+    echo "<p>NIK tidak ditemukan di URL.</p>";
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -207,11 +219,11 @@ $agama = mysqli_fetch_assoc($resultAgama);
                     </tr>
                     <tr style="height:25px;">
                       <td><b>Agama</b></td>
-                      <td><?php echo htmlspecialchars($agama['nama_agama']); ?></td>
+                      <td><?php echo htmlspecialchars($penduduk['nama_agama']); ?></td>
                     </tr>
                     <tr style="height:25px;">
                       <td><b>Alamat</b></td>
-                      <td><?php echo htmlspecialchars($desa['nama_daerah']); ?></td>
+                      <td><?php echo htmlspecialchars($penduduk['nama_daerah']); ?></td>
                     </tr>
                   </tbody>
             </table>

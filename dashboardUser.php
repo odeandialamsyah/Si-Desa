@@ -100,10 +100,17 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
                     </a>
                 </li>
                 <li>
-                    <a href="bantuan.php" style="text-decoration: none;">
+                <?php if (!$penduduk): ?>
+                    <a href="#" style="text-decoration: none;" onclick="alert('Data penduduk tidak ditemukan. Silakan perbarui data Anda di halaman profil.'); return false;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
                     </a>
+                    <?php else: ?>
+                        <a href="bantuan.php" style="text-decoration: none;">
+                        <span class="fa fa-info-circle"></span>
+                        <small>Bantuan Sosial</small>
+                    </a>
+                <?php endif; ?>
                 </li>
             </ul>
         </div>

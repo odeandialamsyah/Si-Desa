@@ -22,26 +22,22 @@ if (!$user_id) {
 
 include 'Back-End/Koneksi/koneksi.php';
 
-// Query untuk mengecek apakah user sudah memiliki data penduduk
-$queryPenduduk = "SELECT * FROM penduduk WHERE user_id = '$user_id'";
+// Query untuk menggabungkan penduduk dengan daerah dan agama
+$queryPenduduk = "SELECT penduduk.*, daerah.nama_daerah, agama.nama_agama FROM penduduk
+    LEFT JOIN daerah ON penduduk.daerah_id = daerah.daerah_id
+    LEFT JOIN agama ON penduduk.agama_id = agama.agama_id
+    WHERE 
+        penduduk.user_id = '$user_id'
+";
 $resultPenduduk = mysqli_query($conn, $queryPenduduk);
+
+// Validasi query penduduk
+if (!$resultPenduduk) {
+    die("Query penduduk gagal: " . mysqli_error($conn));
+}
+
+// Fetch hasil join
 $penduduk = mysqli_fetch_assoc($resultPenduduk);
-
-// Query untuk mengambil data desa
-$queryDesa = "SELECT daerah_id, nama_daerah FROM daerah";
-$resultDesa = mysqli_query($conn, $queryDesa);
-$desa = mysqli_fetch_assoc($resultDesa);
-// Validasi query desa
-if (!$resultDesa) {
-    die("Query desa gagal: " . mysqli_error($conn));
-}
-
-$queryAgama = "SELECT agama_id, nama_agama FROM agama";
-$resultAgama = mysqli_query($conn, $queryAgama);
-$agama = mysqli_fetch_assoc($resultAgama);
-if (!$resultAgama) {
-    die("Query agama gagal: " . mysqli_error($conn));
-}
 ?>
 
 <!DOCTYPE html>
@@ -116,10 +112,17 @@ if (!$resultAgama) {
                     </a>
                 </li>
                 <li>
-                    <a href="bantuan.php" style="text-decoration: none;">
+                <?php if (!$penduduk): ?>
+                    <a href="#" style="text-decoration: none;" onclick="alert('Data penduduk tidak ditemukan. Silakan perbarui data Anda di halaman profil.'); return false;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
                     </a>
+                    <?php else: ?>
+                        <a href="bantuan.php" style="text-decoration: none;">
+                        <span class="fa fa-info-circle"></span>
+                        <small>Bantuan Sosial</small>
+                    </a>
+                <?php endif; ?>
                 </li>
             </ul>
         </div>
@@ -293,11 +296,11 @@ if (!$resultAgama) {
                     </tr>
                     <tr style="height:25px;">
                     <td><b>Agama</b></td>
-                    <td><?php echo htmlspecialchars($agama['nama_agama']); ?></td>
+                    <td><?php echo htmlspecialchars($penduduk['nama_agama']); ?></td>
                     </tr>
                     <tr style="height:25px;">
                     <td><b>Alamat</b></td>
-                    <td><?php echo htmlspecialchars($desa['nama_daerah']); ?></td>
+                    <td><?php echo htmlspecialchars($penduduk['nama_daerah']); ?></td>
                     </tr>
                 </tbody>
             </table>
