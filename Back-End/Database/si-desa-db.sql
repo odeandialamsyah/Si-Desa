@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 23, 2025 at 02:01 PM
+-- Generation Time: Jan 27, 2025 at 09:50 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.8
 
@@ -44,7 +44,8 @@ INSERT INTO `agama` (`agama_id`, `nama_agama`, `created_at`, `updated_at`) VALUE
 (3, 'Katolik', '2024-12-24 06:18:06', '2024-12-24 06:18:06'),
 (4, 'Hindu', '2024-12-24 06:18:06', '2024-12-24 06:18:06'),
 (5, 'Buddha', '2024-12-24 06:18:06', '2024-12-24 06:18:06'),
-(6, 'Konghucu', '2024-12-24 06:18:06', '2024-12-24 06:18:06');
+(6, 'Konghucu', '2024-12-24 06:18:06', '2024-12-24 06:18:06'),
+(7, 'islam', '2025-01-24 03:14:07', '2025-01-24 03:14:07');
 
 -- --------------------------------------------------------
 
@@ -60,6 +61,7 @@ CREATE TABLE `bantuan` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` enum('pending','approved','rejected') COLLATE utf8mb4_general_ci DEFAULT 'pending',
+  `foto_bukti` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `penduduk_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -67,9 +69,9 @@ CREATE TABLE `bantuan` (
 -- Dumping data for table `bantuan`
 --
 
-INSERT INTO `bantuan` (`bantuan_id`, `user_id`, `nama_bantuan`, `jenis_bantuan`, `created_at`, `updated_at`, `status`, `penduduk_id`) VALUES
-(9, NULL, 'mobil', 'Uang Tunai', '2025-01-23 11:38:51', '2025-01-23 11:42:16', 'approved', 5),
-(12, 6, 'pupuk', 'Barang', '2025-01-23 13:34:06', '2025-01-23 13:34:06', 'pending', 5);
+INSERT INTO `bantuan` (`bantuan_id`, `user_id`, `nama_bantuan`, `jenis_bantuan`, `created_at`, `updated_at`, `status`, `foto_bukti`, `penduduk_id`) VALUES
+(13, 7, 'kapal', 'Uang Tunai', '2025-01-24 14:31:59', '2025-01-27 21:27:34', 'approved', '1738013254_DSC00966.JPG', 6),
+(14, 6, 'pupuk', 'Uang Tunai', '2025-01-27 21:32:33', '2025-01-27 21:46:54', 'approved', '1738014414_WhatsApp Image 2025-01-16 at 08.46.16_a1f7c1ac.jpg', 4);
 
 -- --------------------------------------------------------
 
@@ -79,14 +81,14 @@ INSERT INTO `bantuan` (`bantuan_id`, `user_id`, `nama_bantuan`, `jenis_bantuan`,
 
 CREATE TABLE `content` (
   `content_id` int NOT NULL,
-  `Judul` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `greeting` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `visi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `misi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Judul` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `greeting` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `visi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `misi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `content`
@@ -142,10 +144,10 @@ CREATE TABLE `laporan` (
 
 CREATE TABLE `pendapatan_desa` (
   `pendapatan_id` int NOT NULL,
-  `nama_pendapatan` varchar(255) NOT NULL,
+  `nama_pendapatan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tanggal_dibuat` date NOT NULL,
-  `gambar_pendapatan` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `gambar_pendapatan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pendapatan_desa`
@@ -187,9 +189,8 @@ CREATE TABLE `penduduk` (
 --
 
 INSERT INTO `penduduk` (`penduduk_id`, `user_id`, `daerah_id`, `agama_id`, `kk`, `nik`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `tempat_lahir`, `pekerjaan`, `gaji`, `jumlah_keluarga`, `foto_diri`, `created_at`, `updated_at`, `file_nik`, `file_kk`) VALUES
-(1, NULL, 6, 1, '3201011234567890', '3201012345678901', 'Budi Santoso', 'Laki-laki', '1989-11-13', 'Bandung', 'Petani', '5000000.00', 4, 'budi_santoso_1735800039.jpg', '2024-12-26 16:00:15', '2025-01-21 12:34:03', NULL, NULL),
-(4, NULL, 12, 1, '1321091111234566', '1321091111234467', 'ode andi', 'Laki-laki', '2005-03-02', 'bandung', 'petani', '2000000.00', 2, 'ode_andi.jpg', '2025-01-21 06:38:47', '2025-01-21 12:33:41', 'ode_andi_nik.pdf', 'ode_andi_kk.pdf'),
-(5, 6, 12, 1, '1432689703184923', '1432689703184924', 'ode andi alamsyah', 'Laki-laki', '2007-03-02', 'busoa', 'backend', '1000000.00', 2, 'ode_andi_alamsyah.jpg', '2025-01-21 12:21:39', '2025-01-23 12:48:16', 'ode_andi_alamsyah_nik.pdf', 'ode_andi_alamsyah_kk.pdf');
+(4, 6, 12, 1, '1321091111234566', '1321091111234467', 'ode andi', 'Laki-laki', '2005-03-02', 'bandung', 'petani', '1000000.00', 2, 'ode_andi.jpg', '2025-01-21 06:38:47', '2025-01-27 21:31:35', 'ode_andi_nik.pdf', 'ode_andi_kk.pdf'),
+(6, 7, 10, 2, '2187349832174837', '2187349832174838', 'ode andi alamsyah', 'Laki-laki', '2005-03-02', 'busoa', 'programmer', '4000000.00', 2, 'ode_andi_alamsyah.jpg', '2025-01-24 03:15:58', '2025-01-24 23:20:59', 'ode_andi_alamsyah_nik.pdf', 'ode_andi_alamsyah_kk.pdf');
 
 -- --------------------------------------------------------
 
@@ -199,10 +200,10 @@ INSERT INTO `penduduk` (`penduduk_id`, `user_id`, `daerah_id`, `agama_id`, `kk`,
 
 CREATE TABLE `potensi_desa` (
   `potensi_id` int NOT NULL,
-  `nama_pariwisata` varchar(255) NOT NULL,
+  `nama_pariwisata` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `create_at` date NOT NULL,
-  `gambar_pariwisata` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `gambar_pariwisata` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `potensi_desa`
@@ -232,7 +233,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `created_at`, `updated_at`, `role`) VALUES
 (1, 'admin@gmail.com', '$2y$10$ozbFsYG6YPCGI/oqrHFjSuDZZCQwLS..1Ubq6rEj/wKxV3wTI6XX2', '2025-01-20 04:17:37', '2025-01-20 04:17:58', 'admin'),
-(6, 'ode@gmail.com', '$2y$10$T.Xl0W8NBfFVrntgmMvqVeq1g1h/.cNIFJ5YazumXDdVEx7jP7TvO', '2025-01-20 04:35:58', '2025-01-20 04:35:58', 'user');
+(6, 'ode@gmail.com', '$2y$10$T.Xl0W8NBfFVrntgmMvqVeq1g1h/.cNIFJ5YazumXDdVEx7jP7TvO', '2025-01-20 04:35:58', '2025-01-20 04:35:58', 'user'),
+(7, 'dila@gmail.com', '$2y$10$OADV3LKHYts2SVbZx1chduDdleymKKOt0ERgE/V3bgH8sDlCgegS.', '2025-01-24 02:29:07', '2025-01-24 02:29:07', 'user');
 
 --
 -- Indexes for dumped tables
@@ -297,7 +299,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bantuan`
 --
 ALTER TABLE `bantuan`
-  MODIFY `bantuan_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `bantuan_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `content`
@@ -327,7 +329,7 @@ ALTER TABLE `pendapatan_desa`
 -- AUTO_INCREMENT for table `penduduk`
 --
 ALTER TABLE `penduduk`
-  MODIFY `penduduk_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `penduduk_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `potensi_desa`
@@ -339,7 +341,7 @@ ALTER TABLE `potensi_desa`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

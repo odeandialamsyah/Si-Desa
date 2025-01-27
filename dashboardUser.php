@@ -122,13 +122,11 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
                 <label for="menu-toggle">
                     <span class="fa-solid fa-bars mt-3" style="color: rgb(255, 255, 255);"></span>
                 </label>
-
                 <div class="dropdown">
                     <span><i class="fa-solid fa-user mr-1" style="color: rgb(255, 255, 255);"></i></span>
                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color: rgb(255, 255, 255);">
                         <b>User</b>
                     </a>
-
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="profil.php">Profil</a></li>
                         <li><a class="dropdown-item" href="Back-End/logout.php">Logout</a></li>
