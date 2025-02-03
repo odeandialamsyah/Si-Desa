@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['nik'])) {
     $nik = $_GET['nik'];
 
     // Query untuk mendapatkan informasi penduduk (termasuk foto)
-    $query = "SELECT foto_diri FROM Penduduk WHERE nik = ?";
+    $query = "SELECT foto_diri FROM penduduk WHERE nik = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $nik);
     $stmt->execute();

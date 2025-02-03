@@ -199,6 +199,7 @@ while ($row = mysqli_fetch_assoc($resultDetailBantuan)) {
                 <thead>
                     <tr>
                         <th>Foto Diri</th>
+                        <th>Foto Bukti Kelompok</th>
                         <th>Nama Lengkap</th>
                         <th>NIK</th>
                         <th>KK</th>
@@ -216,6 +217,9 @@ while ($row = mysqli_fetch_assoc($resultDetailBantuan)) {
                     echo "<tr>
                     <td>
                         <img src='Back-End/Uploads/foto_diri/" . $row['foto_diri'] . "' alt='Foto Diri' height='150px'>
+                    </td>
+                    <td>
+                        <img src='uploads/" . $row['foto_bukti_kelompok'] . "' alt='Foto Bukti' height='150px'>
                     </td>
                     <td>{$row['nama_lengkap']}</td>
                     <td>{$row['nik']}</td>

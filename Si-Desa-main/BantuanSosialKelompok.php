@@ -154,6 +154,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                             <th scope="col">Nomor Kelompok</th>
                             <th scope="col">Nama Bantuan</th>
                             <th scope="col">Jenis Bantuan</th>
+                            <th scope="col">Foto Bukti</th>
                             <th scope="col">Status</th>
                             <th scope="col">Opsi</th>
                         </tr>
@@ -182,6 +183,20 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                                     <td>{$row['bantuan_kelompok_id']}</td>
                                     <td>{$row['nama_bantuan']}</td>
                                     <td>{$row['jenis_bantuan']}</td>
+                                     <td>";
+                                    if ($row['foto_bukti_kelompok']) {
+                                        echo "<img src='uploads/{$row['foto_bukti_kelompok']}' alt='Foto Bukti' width='100'>";
+                                    } elseif ($row['status'] == 'approved') {
+                                        echo "
+                                        <form action='Back-End/upload_foto_bukti_kelompok.php' method='POST' enctype='multipart/form-data'>
+                                            <input type='hidden' name='bantuan_kelompok_id' value='{$row['bantuan_kelompok_id']}'>
+                                            <input type='file' name='foto_bukti_kelompok' accept='image/*' required>
+                                            <button type='submit' class='btn btn-success btn-sm mt-1'>Upload</button>
+                                        </form>";
+                                    } else {
+                                        echo "-";
+                                    }                                  
+                                    echo "</td>
                                     <td>
                                     <form action='Back-End/update_status_kelompok.php' method='POST'>
                                         <input type='hidden' name='bantuan_kelompok_id' value='{$row['bantuan_kelompok_id']}'>

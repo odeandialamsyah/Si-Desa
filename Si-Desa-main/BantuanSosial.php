@@ -214,7 +214,8 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                                         data-daerah='{$row['nama_daerah']}' 
                                         data-jumlah='{$row['jumlah_keluarga']}' 
                                         data-bantuan='{$row['nama_bantuan']}' 
-                                        data-jenis='{$row['jenis_bantuan']}' 
+                                        data-jenis='{$row['jenis_bantuan']}'
+                                        data-bukti='{$row['foto_bukti']}' 
                                         data-bs-toggle='modal' 
                                         data-bs-target='#editModal'>
                                         <i class='fa-solid fa-pen-to-square mr-2' style='color: #e17833;'></i>
@@ -303,7 +304,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <h5 class="modal-title" id="editModalLabel">Edit Bantuan Sosial</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="Back-End/update_bantuan.php" method="POST">
+                    <form action="Back-End/update_bantuan.php" method="POST"  enctype="multipart/form-data">
                         <div class="modal-body">
                             <input type="hidden" id="edit_bantuan_id" name="bantuan_id">
                             <div class="mb-3">
@@ -333,6 +334,10 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                                     <option value="Barang">Barang</option>
                                     <option value="Jasa">Jasa</option>
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="foto_bukti" class="form-label">Foto Bukti</label>
+                                <input type="file" class="form-control" id="foto_bukti" name="foto_bukti" accept="image/*">
                             </div>
                         </div>
                         <div class="modal-footer">

@@ -183,7 +183,7 @@ while ($row = mysqli_fetch_assoc($resultDetailBantuan)) {
                     <h2>Edit Data Bantuan Kelompok</h2>
                     <?php if (!empty($dataDetailBantuan)): ?>
                         <!-- Form untuk mengedit data -->
-                        <form action="Back-End/update_bantuan_kelompok.php" method="POST">
+                        <form action="Back-End/update_bantuan_kelompok.php" method="POST" enctype="multipart/form-data">
                             <!-- Input hidden untuk menyimpan ID Bantuan -->
                             <input type="hidden" name="bantuan_kelompok_id" value="<?= $bantuan_kelompok_id; ?>">
 
@@ -228,6 +228,11 @@ while ($row = mysqli_fetch_assoc($resultDetailBantuan)) {
                                     <option value="approved" <?= $dataDetailBantuan[0]['status'] === 'approved' ? 'selected' : ''; ?>>Approved</option>
                                     <option value="rejected" <?= $dataDetailBantuan[0]['status'] === 'rejected' ? 'selected' : ''; ?>>Rejected</option>
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="foto_bukti" class="form-label">Foto Bukti</label>
+                                <input type="file" class="form-control" id="foto_bukti_kelompok" name="foto_bukti_kelompok" accept="image/*">
                             </div>
 
                             <!-- Tanggal Dibuat -->

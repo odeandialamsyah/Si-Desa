@@ -392,7 +392,7 @@ if (!$resultAgama) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formEditPenduduk" method="POST" action="Back-End/update_penduduk.php">
+                        <form id="formEditPenduduk" method="POST" action="Back-End/update_penduduk.php" enctype="multipart/form-data">
                             <input type="hidden" id="editNik" name="nik">
                             <input type="hidden" id="editKk" name="kk">
 

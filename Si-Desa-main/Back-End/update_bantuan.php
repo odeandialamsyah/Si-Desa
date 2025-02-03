@@ -15,23 +15,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bantuan_id = $_POST['bantuan_id'];
     $nama_bantuan = $_POST['nama_bantuan'];
     $jenis_bantuan = $_POST['jenis_bantuan'];
+    $foto_bukti = $_FILES['foto_bukti'];
 
-    // Update query
+    // Ambil foto lama dari database
+    $query = "SELECT foto_bukti FROM bantuan WHERE bantuan_id = '$bantuan_id'";
+    $result = mysqli_query($conn, $query);
+    $data = mysqli_fetch_assoc($result);
+    $old_foto_bukti = $data['foto_bukti'];  // Foto lama
+
+    // Proses update data bantuan
     $query = "UPDATE bantuan SET nama_bantuan = '$nama_bantuan', jenis_bantuan = '$jenis_bantuan' WHERE bantuan_id = '$bantuan_id'";
 
     if (mysqli_query($conn, $query)) {
-        echo "<script>alert('Data berhasil diupdate!'); window.location.href='../BantuanSosial.php';</script>";
+        // Jika ada foto baru yang diupload
+        if (isset($foto_bukti) && $foto_bukti['error'] === 0) {
+            // Tentukan lokasi upload
+            $upload_dir = '../uploads/';
+            // Generate nama file unik untuk foto baru
+            $filename = time() . '_' . basename($foto_bukti['name']);
+            $destination = $upload_dir . $filename;
+
+            // Validasi tipe file (hanya gambar)
+            $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (in_array($foto_bukti['type'], $allowed_types)) {
+                // Pindahkan file ke folder tujuan
+                if (move_uploaded_file($foto_bukti['tmp_name'], $destination)) {
+                    // Hapus foto lama jika ada
+                    if ($old_foto_bukti && file_exists($upload_dir . $old_foto_bukti)) {
+                        unlink($upload_dir . $old_foto_bukti);
+                    }
+
+                    // Update nama file foto ke database
+                    $query = "UPDATE bantuan SET foto_bukti = '$filename' WHERE bantuan_id = '$bantuan_id'";
+                    if (mysqli_query($conn, $query)) {
+                        // Redirect dengan pesan sukses
+                        echo "<script>alert('Data dan foto berhasil diupdate!'); window.location.href='../BantuanSosial.php';</script>";
+                    } else {
+                        echo "Error: " . mysqli_error($conn);
+                    }
+                } else {
+                    echo "Gagal mengunggah file.";
+                }
+            } else {
+                echo "Tipe file tidak valid. Hanya file JPG, JPEG, dan PNG yang diperbolehkan.";
+            }
+        } else {
+            // Jika tidak ada foto baru, tetap gunakan foto lama
+            echo "<script>alert('Data berhasil diupdate!'); window.location.href='../BantuanSosial.php';</script>";
+        }
     } else {
         echo "Error: " . $query . "<br>" . mysqli_error($conn);
     }
 }
 
-
+// Ambil data dari database untuk form edit
 if (isset($_GET['bantuan_id'])) {
     $bantuan_id = $_GET['bantuan_id'];
 
     // Ambil data dari database
-    $query = "SELECT b.bantuan_id, b.nama_bantuan, b.jenis_bantuan, p.kk, p.nama_lengkap, p.jumlah_keluarga, d.nama_daerah, b.penduduk_id 
+    $query = "SELECT b.bantuan_id, b.nama_bantuan, b.jenis_bantuan, b.foto_bukti, p.kk, p.nama_lengkap, p.jumlah_keluarga, d.nama_daerah, b.penduduk_id 
               FROM bantuan b
               JOIN penduduk p ON b.penduduk_id = p.penduduk_id
               JOIN daerah d ON p.daerah_id = d.daerah_id
