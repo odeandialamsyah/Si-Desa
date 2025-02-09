@@ -11,6 +11,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -22,30 +23,40 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
     <title>Sistem Informasi Desa</title>
     <style>
         .form-container {
-            width: 50%; /* Set lebar menjadi 50% */
-            margin: 0 auto; /* Tengah secara horizontal */
-            padding: 20px; /* Tambahkan padding untuk estetika */
-            border: 1px solid #ccc; /* Opsional: Tambahkan border */
-            border-radius: 10px; /* Opsional: Tambahkan border-radius */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Opsional: Tambahkan bayangan */
-            background-color: #f9f9f9; /* Opsional: Tambahkan warna latar */
+            width: 50%;
+            /* Set lebar menjadi 50% */
+            margin: 0 auto;
+            /* Tengah secara horizontal */
+            padding: 20px;
+            /* Tambahkan padding untuk estetika */
+            border: 1px solid #ccc;
+            /* Opsional: Tambahkan border */
+            border-radius: 10px;
+            /* Opsional: Tambahkan border-radius */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Opsional: Tambahkan bayangan */
+            background-color: #f9f9f9;
+            /* Opsional: Tambahkan warna latar */
         }
+
         .card {
             background-color: #fff;
             border-radius: 5px;
             padding: 20px;
             margin: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             text-align: center;
         }
+
         canvas {
             width: 100% !important;
             height: auto !important;
         }
     </style>
 </head>
+
 <body>
-<input type="checkbox" id="menu-toggle">
+    <input type="checkbox" id="menu-toggle">
     <div class="sidebar">
         <div class="side-header">
             <h3><b>SID</b><span><b>esa</b></span></h3>
@@ -75,7 +86,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <small>Data Klasifikasi</small>
                     </a>
                 </li>
-                
+
                 <li>
                     <a href="dataPenduduk.php" style="text-decoration: none;">
                         <span class="fa fa-user"></span>
@@ -86,6 +97,12 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                     <a href="BantuanSosial.php" style="text-decoration: none;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="BantuanSosialKelompok.php" style="text-decoration: none;">
+                        <span class="fa fa-info-circle"></span>
+                        <small class="text-left">Bantuan Sosial Kelompok</small>
                     </a>
                 </li>
                 <li>
@@ -101,17 +118,12 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                     </a>
                 </li>
                 <li>
-                    <a href="pendapatan.php" style="text-decoration: none;">
+                    <a href="pengaduan.php" style="text-decoration: none;">
                         <span class="fa fa-list-alt"></span>
-                        <small>Pendapatan Desa</small>
+                        <small>Pengaduan</small>
                     </a>
                 </li>
                 <li>
-                    <a href="potensi.php" style="text-decoration: none;">
-                        <span class="fa fa-list-alt"></span>
-                        <small>Potensi Desa</small>
-                    </a>
-                </li>
             </ul>
         </div>
     </div>
@@ -149,7 +161,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                             <th scope="col">Jumlah Keluarga</th>
                             <th scope="col">Bantuan</th>
                             <th scope="col">Jenis Bantuan</th>
-                            <th scope="col">Foto Bukti</th>                            
+                            <th scope="col">Foto Bukti</th>
                             <th scope="col">Action</th>
                             <th scope="col">Opsi</th>
                         </tr>
@@ -158,10 +170,10 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <?php
                         include 'Back-End/Koneksi/koneksi.php';
                         $result = mysqli_query($conn, "
-                            SELECT b.*, p.kk, p.nama_lengkap, p.jumlah_keluarga, d.nama_daerah 
-                            FROM bantuan b
-                            LEFT JOIN penduduk p ON b.penduduk_id = p.penduduk_id
-                            LEFT JOIN daerah d ON p.daerah_id = d.daerah_id
+                            SELECT penduduk.kk, penduduk.nama_lengkap, daerah.nama_daerah, penduduk.jumlah_keluarga, bantuan.nama_bantuan, bantuan.jenis_bantuan, bantuan.status, bantuan.foto_bukti, bantuan.bantuan_id
+FROM penduduk
+JOIN daerah ON  penduduk.daerah_id = daerah.daerah_id
+JOIN bantuan ON penduduk.user_id = bantuan.user_id
                         ");
 
                         $no = 1;
@@ -177,7 +189,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                                 <td>{$row['jenis_bantuan']}</td>
                                 <td>";
                                 if ($row['foto_bukti']) {
-                                    echo "<img src='uploads/{$row['foto_bukti']}' alt='Foto Bukti' width='100'>";
+                                    echo "<img src='Back-End/uploads/{$row['foto_bukti']}' alt='Foto Bukti' width='100'>";
                                 } elseif ($row['status'] == 'approved') {
                                     echo "
                                     <form action='Back-End/upload_foto_bukti.php' method='POST' enctype='multipart/form-data'>
@@ -216,7 +228,9 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                                     <a href='Back-End/delete_bantuan.php?bantuan_id={$row['bantuan_id']}' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");' class='text-danger'>
                                         <i class='fa-solid fa-trash mr-2'></i>
                                     </a>
-                                    <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;' data-bs-toggle='modal' data-bs-target='#modal1'></i>
+                                    <a href='viewBantuanSosial.php?bantuan_id={$row['bantuan_id']}' style='text-decoration: none;'>
+                                        <i class='fa-solid fa-eye mr-2' style='color: #2ad53e;'></i>
+                                    </a>
                                 </td>
                             </tr>
                             ";
@@ -236,7 +250,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="Back-End/proses_tambah_bantuan.php"  method="POST">
+                        <form action="Back-End/proses_tambah_bantuan.php" method="POST">
                             <!-- <div class="mb-3">
                                 <label for="penduduk_id" class="form-label">Nomor KK</label>
                                 <select name="penduduk_id" id="penduduk_id" class="form-select" required>
@@ -339,24 +353,26 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#search_kk').on('keyup', function() {
-        const query = $(this).val().trim(); // Ambil teks yang diketik
+    <script>
+        $(document).ready(function() {
+            $('#search_kk').on('keyup', function() {
+                const query = $(this).val().trim(); // Ambil teks yang diketik
 
-        if (query.length > 0) {
-            $.ajax({
-                url: 'Back-End/search_kk.php', // Endpoint pencarian
-                type: 'GET',
-                data: { q: query }, // Kirim parameter pencarian
-                success: function(data) {
-                    const results = JSON.parse(data);
-                    let html = '';
+                if (query.length > 0) {
+                    $.ajax({
+                        url: 'Back-End/search_kk.php', // Endpoint pencarian
+                        type: 'GET',
+                        data: {
+                            q: query
+                        }, // Kirim parameter pencarian
+                        success: function(data) {
+                            const results = JSON.parse(data);
+                            let html = '';
 
-                    if (results.length > 0) {
-                        // Render hasil pencarian
-                        results.forEach(item => {
-                            html += `
+                            if (results.length > 0) {
+                                // Render hasil pencarian
+                                results.forEach(item => {
+                                    html += `
                                 <a href="#" class="list-group-item list-group-item-action" 
                                    data-id="${item.id}" 
                                    data-kk="${item.kk}" 
@@ -365,72 +381,72 @@ $(document).ready(function() {
                                    data-jumlah="${item.jumlah_keluarga}">
                                    ${item.kk} - ${item.nama_lengkap}
                                 </a>`;
-                        });
-                    } else {
-                        html = '<div class="list-group-item">Tidak ada hasil ditemukan.</div>';
-                    }
+                                });
+                            } else {
+                                html = '<div class="list-group-item">Tidak ada hasil ditemukan.</div>';
+                            }
 
-                    $('#search_results').html(html).show();
-                },
-                error: function() {
-                    $('#search_results').html('<div class="list-group-item">Terjadi kesalahan.</div>').show();
+                            $('#search_results').html(html).show();
+                        },
+                        error: function() {
+                            $('#search_results').html('<div class="list-group-item">Terjadi kesalahan.</div>').show();
+                        }
+                    });
+                } else {
+                    $('#search_results').hide();
                 }
             });
-        } else {
-            $('#search_results').hide();
-        }
-    });
 
-    // Pilih hasil pencarian
-    $(document).on('click', '#search_results .list-group-item', function(e) {
-        e.preventDefault();
+            // Pilih hasil pencarian
+            $(document).on('click', '#search_results .list-group-item', function(e) {
+                e.preventDefault();
 
-        const pendudukId = $(this).data('id');
-        const namaLengkap = $(this).data('nama');
-        const namaDaerah = $(this).data('daerah');
-        const jumlahKeluarga = $(this).data('jumlah');
+                const pendudukId = $(this).data('id');
+                const namaLengkap = $(this).data('nama');
+                const namaDaerah = $(this).data('daerah');
+                const jumlahKeluarga = $(this).data('jumlah');
 
-        // Isi form dengan data yang dipilih
-        $('#penduduk_id').val(pendudukId);
-        $('#search_kk').val($(this).data('kk'));
-        $('#nama_lengkap').val(namaLengkap);
-        $('#nama_daerah').val(namaDaerah);
-        $('#jumlah_keluarga').val(jumlahKeluarga);
+                // Isi form dengan data yang dipilih
+                $('#penduduk_id').val(pendudukId);
+                $('#search_kk').val($(this).data('kk'));
+                $('#nama_lengkap').val(namaLengkap);
+                $('#nama_daerah').val(namaDaerah);
+                $('#jumlah_keluarga').val(jumlahKeluarga);
 
-        // Sembunyikan hasil pencarian
-        $('#search_results').hide();
-    });
+                // Sembunyikan hasil pencarian
+                $('#search_results').hide();
+            });
 
-    // Sembunyikan hasil pencarian jika klik di luar
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('#search_kk, #search_results').length) {
-            $('#search_results').hide();
-        }
-    });
-});
+            // Sembunyikan hasil pencarian jika klik di luar
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#search_kk, #search_results').length) {
+                    $('#search_results').hide();
+                }
+            });
+        });
 
-$(document).ready(function() {
-    $('.btn-edit').on('click', function() {
-        // Ambil data dari atribut tombol
-        const bantuanId = $(this).data('id');
-        const kk = $(this).data('kk');
-        const nama = $(this).data('nama');
-        const daerah = $(this).data('daerah');
-        const jumlah = $(this).data('jumlah');
-        const bantuan = $(this).data('bantuan');
-        const jenis = $(this).data('jenis');
+        $(document).ready(function() {
+            $('.btn-edit').on('click', function() {
+                // Ambil data dari atribut tombol
+                const bantuanId = $(this).data('id');
+                const kk = $(this).data('kk');
+                const nama = $(this).data('nama');
+                const daerah = $(this).data('daerah');
+                const jumlah = $(this).data('jumlah');
+                const bantuan = $(this).data('bantuan');
+                const jenis = $(this).data('jenis');
 
-        // Isi data ke dalam form modal
-        $('#editModal #edit_bantuan_id').val(bantuanId);
-        $('#editModal #edit_kk').val(kk);
-        $('#editModal #edit_nama_lengkap').val(nama);
-        $('#editModal #edit_nama_daerah').val(daerah);
-        $('#editModal #edit_jumlah_keluarga').val(jumlah);
-        $('#editModal #edit_nama_bantuan').val(bantuan);
-        $('#editModal #edit_jenis_bantuan').val(jenis);
-    });
-});
-
-</script>
+                // Isi data ke dalam form modal
+                $('#editModal #edit_bantuan_id').val(bantuanId);
+                $('#editModal #edit_kk').val(kk);
+                $('#editModal #edit_nama_lengkap').val(nama);
+                $('#editModal #edit_nama_daerah').val(daerah);
+                $('#editModal #edit_jumlah_keluarga').val(jumlah);
+                $('#editModal #edit_nama_bantuan').val(bantuan);
+                $('#editModal #edit_jenis_bantuan').val(jenis);
+            });
+        });
+    </script>
 </body>
+
 </html>
