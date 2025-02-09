@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Eksekusi query
     if ($stmt->execute()) {
-        echo "<script>alert('Data potensi desa berhasil diperbarui!'); window.location.href='../potensi.php';</script>";
+        echo "<script>alert('Data potensi desa berhasil diperbarui!'); window.location.href='../konten.php';</script>";
     } else {
         echo "<script>alert('Gagal memperbarui data. Error: " . $stmt->error . "'); window.history.back();</script>";
     }
@@ -91,6 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->close();
 } else {
     // Jika akses tidak melalui POST
-    echo "<script>alert('Akses tidak diizinkan!'); window.location.href='../potensi.php';</script>";
+    echo "<script>alert('Akses tidak diizinkan!'); window.location.href='../konten.php';</script>";
 }
 ?>

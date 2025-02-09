@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['potensi_id'])) {
 
         // Eksekusi query
         if ($stmt->execute()) {
-            echo "<script>alert('Data potensi dan fotonya berhasil dihapus!'); window.location.href='../potensi.php';</script>";
+            echo "<script>alert('Data potensi dan fotonya berhasil dihapus!'); window.location.href='../konten.php';</script>";
         } else {
             echo "<script>alert('Gagal menghapus data. Silakan coba lagi.'); window.history.back();</script>";
         }
@@ -43,6 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['potensi_id'])) {
     $conn->close();
 } else {
     // Jika akses tidak valid
-    echo "<script>alert('Akses tidak diizinkan atau data tidak valid!'); window.location.href='../potensi.php';</script>";
+    echo "<script>alert('Akses tidak diizinkan atau data tidak valid!'); window.location.href='../konten.php';</script>";
 }
 ?>

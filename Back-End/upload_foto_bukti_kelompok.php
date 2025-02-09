@@ -5,16 +5,16 @@ include 'Koneksi/koneksi.php';
 // Pastikan metode request adalah POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form
-    $bantuan_id = $_POST['bantuan_id'];
-    $foto_bukti = $_FILES['foto_bukti'];
+    $bantuan_id = $_POST['bantuan_kelompok_id'];
+    $foto_bukti = $_FILES['foto_bukti_kelompok'];
 
     // Validasi apakah file diunggah
     if (isset($foto_bukti) && $foto_bukti['error'] === 0) {
         // Tentukan lokasi upload
-        $upload_dir = 'uploads/file_bukti_bantuan_kelompok/';
+        $upload_dir = '../Back-End/Uploads/file_bukti_bantuan_kelompok/';
         // Generate nama file unik
         $filename = time() . '_' . basename($foto_bukti['name']);
-        $destination = 'uploads/' . $filename;
+        $destination = $upload_dir . $filename;
 
         // Validasi tipe file (hanya gambar)
         $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -22,15 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Pindahkan file ke folder tujuan
             if (move_uploaded_file($foto_bukti['tmp_name'], $destination)) {
                 // Update nama file ke database
-                $query = "UPDATE bantuan SET foto_bukti = '$filename' WHERE bantuan_id = '$bantuan_id'";
-                if (mysqli_query($conn, $query)) {
-                    // Redirect dengan pesan sukses
-                    header("Location: ../BantuanSosial.php?upload_success=true");
+                $query = "UPDATE bantuan_kelompok SET foto_bukti_kelompok = '$filename' WHERE bantuan_kelompok_id = '$bantuan_id'";
+                mysqli_query($conn, $query);
+                if (mysqli_affected_rows($conn) > 0) {
+                    echo "Data berhasil diperbarui!";
+                    header("Location: ../BantuanSosialKelompok.php?upload_success=true");
                     exit();
                 } else {
-                    // Tampilkan pesan error jika query gagal
-                    echo "Error: " . mysqli_error($conn);
+                    echo "Tidak ada perubahan data.";
                 }
+
+                // if (mysqli_query($conn, $query)) {
+                //     // Redirect dengan pesan sukses
+                //     // header("Location: ../BantuanSosialKelompok.php?upload_success=true");
+                //     // exit();
+                // } else {
+                //     // Tampilkan pesan error jika query gagal
+                //     echo "Error: " . mysqli_error($conn);
+                // }
             } else {
                 echo "Gagal mengunggah file.";
             }
@@ -43,4 +52,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Metode request tidak valid.";
 }
-?>

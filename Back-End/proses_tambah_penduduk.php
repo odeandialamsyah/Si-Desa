@@ -15,7 +15,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pekerjaan = !empty($_POST['pekerjaan']) ? $_POST['pekerjaan'] : NULL;
     $gaji = !empty($_POST['gaji']) ? $_POST['gaji'] : NULL;
     $jumlah_keluarga = !empty($_POST['jumlah_keluarga']) ? $_POST['jumlah_keluarga'] : 0;
-    
+    $agama_id = $_POST['agama_id'];
+    $agama_lainnya = !empty($_POST['agama_lainnya']) ? $_POST['agama_lainnya'] : NULL;
+
+    // Jika agama lainnya diisi, tambahkan ke database dan dapatkan ID-nya
+    if ($agama_id === 'lainnya' && $agama_lainnya) {
+        $stmt = $conn->prepare("INSERT INTO agama (nama_agama) VALUES (?)");
+        $stmt->bind_param("s", $agama_lainnya);
+        if ($stmt->execute()) {
+            $agama_id = $stmt->insert_id; // Dapatkan ID agama yang baru ditambahkan
+        } else {
+            echo "<script>alert('Gagal menambahkan agama baru!'); window.history.back();</script>";
+            exit;
+        }
+        $stmt->close();
+    }
+
     // Proses Upload Foto Diri
     if (isset($_FILES['foto_diri']) && $_FILES['foto_diri']['error'] === UPLOAD_ERR_OK) {
         $foto_diri = $_FILES['foto_diri'];
@@ -112,7 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file_kk_path = NULL; // Jika tidak ada file yang diunggah
     }
 
-
     // Validasi KK (16 digit angka)
     if (!preg_match('/^\d{16}$/', $kk)) {
         echo "<script>alert('Nomor KK harus terdiri dari 16 digit angka!'); window.history.back();</script>";
@@ -126,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // **Cek apakah NIK sudah ada di database**
-    $cekNIK = $conn->prepare("SELECT nik FROM Penduduk WHERE nik = ?");
+    $cekNIK = $conn->prepare("SELECT nik FROM penduduk WHERE nik = ?");
     $cekNIK->bind_param("s", $nik);
     $cekNIK->execute();
     $cekNIK->store_result();
@@ -138,15 +152,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $cekNIK->close();
 
-    // Query tambah data (tanpa agama_id)
-    $sql = "INSERT INTO Penduduk 
-            (daerah_id, kk, nik, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir, pekerjaan, gaji, jumlah_keluarga, foto_diri, file_nik, file_kk, created_at, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+    // Query tambah data (dengan agama_id)
+    $sql = "INSERT INTO penduduk 
+            (daerah_id, kk, nik, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir, pekerjaan, gaji, jumlah_keluarga, foto_diri, file_nik, file_kk, agama_id, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
     // Persiapkan statement
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "isssssssdisss", // Total 12 tipe data
+        "isssssssdisssi", // Total 13 tipe data
         $daerah_id,         // i
         $kk,                // s
         $nik,               // s
@@ -159,7 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $jumlah_keluarga,   // i
         $foto_path,         // s
         $file_nik_path,     // s
-        $file_kk_path       // s
+        $file_kk_path,      // s
+        $agama_id           // i
     );    
 
     // Eksekusi query

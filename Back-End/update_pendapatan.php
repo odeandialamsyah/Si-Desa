@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Proses Upload Gambar (jika ada file yang diunggah)
     if (isset($_FILES['gambar_pendapatan']) && $_FILES['gambar_pendapatan']['error'] === UPLOAD_ERR_OK) {
-        $gambar_pariwisata = $_FILES['gambar_pendapatan'];
+        $gambar_pendapatan = $_FILES['gambar_pendapatan'];
         $target_dir = "Uploads/gambar_pendapatan/";
 
         // Buat folder jika belum ada
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Eksekusi query
     if ($stmt->execute()) {
-        echo "<script>alert('Data potensi desa berhasil diperbarui!'); window.location.href='../pendapatan.php';</script>";
+        echo "<script>alert('Data potensi desa berhasil diperbarui!'); window.location.href='../konten.php';</script>";
     } else {
         echo "<script>alert('Gagal memperbarui data. Error: " . $stmt->error . "'); window.history.back();</script>";
     }
@@ -91,6 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->close();
 } else {
     // Jika akses tidak melalui POST
-    echo "<script>alert('Akses tidak diizinkan!'); window.location.href='../pendapatan.php';</script>";
+    echo "<script>alert('Akses tidak diizinkan!'); window.location.href='../konten.php';</script>";
 }
 ?>
