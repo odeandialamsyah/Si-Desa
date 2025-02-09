@@ -12,6 +12,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -27,35 +28,38 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
 </head>
 
 
-    <style>
-        .card {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            text-align: center;
-        }
+<style>
+    .card {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
 
-        .card-header {
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    .card-header {
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-        .card-body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+    .card-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
 
-        canvas {
-            width: 100% !important; /* Memastikan grafik menyesuaikan lebar kontainer */
-            height: auto !important; /* Memastikan grafik menyesuaikan tinggi kontainer */
-        }
-    </style>
+    canvas {
+        width: 100% !important;
+        /* Memastikan grafik menyesuaikan lebar kontainer */
+        height: auto !important;
+        /* Memastikan grafik menyesuaikan tinggi kontainer */
+    }
+</style>
 </head>
+
 <body>
     <input type="checkbox" id="menu-toggle">
     <div class="sidebar">
@@ -84,10 +88,10 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                 <li>
                     <a href="dataKlasifikasi.php" style="text-decoration: none;">
                         <span class="fa fa-users"></span>
-                        <small>Data Klasifikasi</small>
+                        <small class="text-left">Data Klasifikasi</small>
                     </a>
                 </li>
-                
+
                 <li>
                     <a href="dataPenduduk.php" style="text-decoration: none;">
                         <span class="fa fa-user"></span>
@@ -98,6 +102,12 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                     <a href="BantuanSosial.php" style="text-decoration: none;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="BantuanSosialKelompok.php" style="text-decoration: none;">
+                        <span class="fa fa-info-circle"></span>
+                        <small class="text-left">Bantuan Sosial Kelompok</small>
                     </a>
                 </li>
                 <li>
@@ -113,15 +123,9 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                     </a>
                 </li>
                 <li>
-                    <a href="pendapatan.php" style="text-decoration: none;">
+                    <a href="pengaduan.php" style="text-decoration: none;">
                         <span class="fa fa-list-alt"></span>
-                        <small>Pendapatan Desa</small>
-                    </a>
-                </li>
-                <li>
-                    <a href="potensi.php" style="text-decoration: none;">
-                        <span class="fa fa-list-alt"></span>
-                        <small>Potensi Desa</small>
+                        <small>Pengaduan</small>
                     </a>
                 </li>
             </ul>
@@ -151,20 +155,20 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
         <main class="container">
             <table class="">
                 <tr class="large-font">
-            <td colspan="7" style="text-align: center;">
-                <h2><b>DATA KLASIFIKASI</b></h2>
-            </td>
-            </tr>
-                    
-            <tr style="background-color: #D9D9D9;">
-                        <th scope="col">No</th>
-                        <th scope="col">Klasifikasi</th>
-                        <th scope="col">Jumlah</th>
-                        <th scope="col">Range Umur</th>
-                    </tr>
+                    <td colspan="7" style="text-align: center;">
+                        <h2><b>DATA KLASIFIKASI</b></h2>
+                    </td>
+                </tr>
+
+                <tr style="background-color: #D9D9D9;">
+                    <th scope="col">No</th>
+                    <th scope="col">Klasifikasi</th>
+                    <th scope="col">Jumlah</th>
+                    <th scope="col">Range Umur</th>
+                </tr>
                 </thead>
                 <tbody>
-                <?php
+                    <?php
                     include 'Back-End/Koneksi/koneksi.php';
 
                     // Query untuk mendapatkan jumlah berdasarkan klasifikasi usia
@@ -181,7 +185,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                         FROM 
                             penduduk
                         GROUP BY klasifikasi_usia;
-                    ";         
+                    ";
                     $result = mysqli_query($conn, $query);
                     $no = 1;
                     while ($data = mysqli_fetch_assoc($result)) {
@@ -191,17 +195,17 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
                             <td>{$data['jumlah']}</td>
                             <td>";
 
-                            // Menampilkan range umur berdasarkan klasifikasi
-                            if ($data['klasifikasi_usia'] == 'Anak-anak') {
-                                echo "0 - 12 Tahun";
-                            } elseif ($data['klasifikasi_usia'] == 'Remaja') {
-                                echo "13 - 17 Tahun";
-                            } elseif ($data['klasifikasi_usia'] == 'Dewasa') {
-                                echo "18 - 59 Tahun";
-                            } elseif ($data['klasifikasi_usia'] == 'Lanjut Usia') {
-                                echo "60 Tahun ke atas";
-                            }
-                            echo "</td></tr>";
+                        // Menampilkan range umur berdasarkan klasifikasi
+                        if ($data['klasifikasi_usia'] == 'Anak-anak') {
+                            echo "0 - 12 Tahun";
+                        } elseif ($data['klasifikasi_usia'] == 'Remaja') {
+                            echo "13 - 17 Tahun";
+                        } elseif ($data['klasifikasi_usia'] == 'Dewasa') {
+                            echo "18 - 59 Tahun";
+                        } elseif ($data['klasifikasi_usia'] == 'Lanjut Usia') {
+                            echo "60 Tahun ke atas";
+                        }
+                        echo "</td></tr>";
                         $no++;
                     }
                     ?>
@@ -209,11 +213,12 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
             </table>
         </main>
     </div>
-        <script type="text/javascript" src="index.js"></script>
-        <script type="text/javascript" src="dataAnggota.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="dataAnggota.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     </div>
 </body>
+
 </html>

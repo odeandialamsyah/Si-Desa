@@ -11,6 +11,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'admin';
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -26,35 +27,38 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'admin';
 </head>
 
 
-    <style>
-        .card {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            text-align: center;
-        }
+<style>
+    .card {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
 
-        .card-header {
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    .card-header {
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-        .card-body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+    .card-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
 
-        canvas {
-            width: 100% !important; /* Memastikan grafik menyesuaikan lebar kontainer */
-            height: auto !important; /* Memastikan grafik menyesuaikan tinggi kontainer */
-        }
-    </style>
+    canvas {
+        width: 100% !important;
+        /* Memastikan grafik menyesuaikan lebar kontainer */
+        height: auto !important;
+        /* Memastikan grafik menyesuaikan tinggi kontainer */
+    }
+</style>
 </head>
+
 <body>
     <input type="checkbox" id="menu-toggle">
     <div class="sidebar">
@@ -74,29 +78,35 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'admin';
 
         <div class="side-menu">
             <ul>
-                    <!-- Menu untuk Admin -->
-                    <li>
-                        <a href="dashboard.php" class="active" style="text-decoration: none;">
-                            <span class="fa fa-compass"></span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>              
-                    <li>
-                        <a href="dataKlasifikasi.php" style="text-decoration: none;">
-                            <span class="fa fa-users"></span>
-                            <small>Data Klasifikasi</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="dataPenduduk.php" style="text-decoration: none;">
-                            <span class="fa fa-user"></span>
-                            <small>Data Penduduk</small>
-                        </a>
-                    </li>
+                <!-- Menu untuk Admin -->
+                <li>
+                    <a href="dashboard.php" class="active" style="text-decoration: none;">
+                        <span class="fa fa-compass"></span>
+                        <small>Dashboard</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="dataKlasifikasi.php" style="text-decoration: none;">
+                        <span class="fa fa-users"></span>
+                        <small>Data Klasifikasi</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="dataPenduduk.php" style="text-decoration: none;">
+                        <span class="fa fa-user"></span>
+                        <small>Data Penduduk</small>
+                    </a>
+                </li>
                 <li>
                     <a href="BantuanSosial.php" style="text-decoration: none;">
                         <span class="fa fa-info-circle"></span>
                         <small>Bantuan Sosial</small>
+                    </a>
+                </li>
+                <li>
+                    <a href="BantuanSosialKelompok.php" style="text-decoration: none;">
+                        <span class="fa fa-info-circle"></span>
+                        <small class="text-left">Bantuan Sosial Kelompok</small>
                     </a>
                 </li>
                 <li>
@@ -112,15 +122,9 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'admin';
                     </a>
                 </li>
                 <li>
-                    <a href="pendapatan.php" style="text-decoration: none;">
+                    <a href="pengaduan.php" style="text-decoration: none;">
                         <span class="fa fa-list-alt"></span>
-                        <small>Pendapatan Desa</small>
-                    </a>
-                </li>
-                <li>
-                    <a href="potensi.php" style="text-decoration: none;">
-                        <span class="fa fa-list-alt"></span>
-                        <small>Potensi Desa</small>
+                        <small>Pengaduan</small>
                     </a>
                 </li>
             </ul>
@@ -176,7 +180,7 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'admin';
                                 Grafik Data Dokumen Penduduk
                             </div>
                             <div class="card-body">
-                                <canvas id="dokumenChart"></canvas>
+                                <canvas id="daerahChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -195,89 +199,98 @@ $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'admin';
             </div>
         </main>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-<script type="text/javascript" src="index.js"></script>
-<script type="text/javascript" src="dataAnggota.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="dataAnggota.js"></script>
 
-<script>
-    const ctxKlasifikasi = document.getElementById('klasifikasiChart').getContext('2d');
-    new Chart(ctxKlasifikasi, {
-        type: 'bar',
-        data: {
-            labels: ['Anak-anak', 'Remaja', 'Dewasa', 'Lansia'],
-            datasets: [{
-                label: 'Jumlah Warga',
-                data: [120, 150, 200, 80],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('Back-End/get_data_grafik.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Grafik Klasifikasi
+                    const klasifikasiCtx = document.getElementById('klasifikasiChart').getContext('2d');
+                    new Chart(klasifikasiCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.klasifikasi.map(item => item.jenis_kelamin),
+                            datasets: [{
+                                label: 'Jumlah Penduduk',
+                                data: data.klasifikasi.map(item => item.jumlah),
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
 
-    const ctxDokumen = document.getElementById('dokumenChart').getContext('2d');
-    new Chart(ctxDokumen, {
-        type: 'pie',
-        data: {
-            labels: ['KTP', 'KK', 'IJAZAH', 'SKCK'],
-            datasets: [{
-                label: 'Persentase Dokumen',
-                data: [30, 25, 20, 25],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
-                ],
-                borderWidth: 1
-            }]
-        }
-    });
+                    // Grafik Daerah
+                    const daerahCtx = document.getElementById('daerahChart').getContext('2d');
+                    new Chart(daerahCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.daerah.map(item => item.nama_daerah),
+                            datasets: [{
+                                label: 'Jumlah Penduduk',
+                                data: data.daerah.map(item => item.jumlah),
+                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
 
-    const ctxAgama = document.getElementById('agamaChart').getContext('2d');
-    new Chart(ctxAgama, {
-        type: 'doughnut',
-        data: {
-            labels: ['Islam', 'Kristen', 'Hindu', 'Buddha', 'Konghucu'],
-            datasets: [{
-                label: 'Jumlah Warga Berdasarkan Agama',
-                data: [50, 20, 15, 10, 5],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
-                ],
-                borderWidth: 1
-            }]
-        }
-    });
-</script>
+                    // Grafik Agama
+                    const agamaCtx = document.getElementById('agamaChart').getContext('2d');
+                    new Chart(agamaCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: data.agama.map(item => item.nama_agama),
+                            datasets: [{
+                                label: 'Jumlah Penduduk',
+                                data: data.agama.map(item => item.jumlah),
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        }
+                    });
+                });
+        });
+    </script>
 
     </div>
 </body>
+
 </html>
