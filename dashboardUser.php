@@ -31,6 +31,7 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -48,7 +49,7 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
             border-radius: 5px;
             padding: 20px;
             margin: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
@@ -71,6 +72,7 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
         }
     </style>
 </head>
+
 <body>
     <input type="checkbox" id="menu-toggle">
     <div class="sidebar">
@@ -100,17 +102,36 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
                     </a>
                 </li>
                 <li>
-                <?php if (!$penduduk): ?>
-                    <a href="#" style="text-decoration: none;" onclick="alert('Data penduduk tidak ditemukan. Silakan perbarui data Anda di halaman profil.'); return false;">
-                        <span class="fa fa-info-circle"></span>
-                        <small>Bantuan Sosial</small>
-                    </a>
+                    <?php if (!$penduduk): ?>
+                        <a href="#" style="text-decoration: none;" onclick="alert('Data penduduk tidak ditemukan. Silakan perbarui data Anda di halaman profil.'); return false;">
+                            <span class="fa fa-info-circle"></span>
+                            <small>Bantuan Sosial</small>
+                        </a>
                     <?php else: ?>
                         <a href="bantuan.php" style="text-decoration: none;">
-                        <span class="fa fa-info-circle"></span>
-                        <small>Bantuan Sosial</small>
+                            <span class="fa fa-info-circle"></span>
+                            <small>Bantuan Sosial</small>
+                        </a>
+                    <?php endif; ?>
+                </li>
+                <li>
+                    <?php if (!$penduduk): ?>
+                        <a href="#" style="text-decoration: none;" onclick="alert('Data penduduk tidak ditemukan. Silakan perbarui data Anda di halaman profil.'); return false;">
+                            <span class="fa fa-info-circle"></span>
+                            <small>Bantuan Sosial Kelompok</small>
+                        </a>
+                    <?php else: ?>
+                        <a href="bantuan_kelompok.php" style="text-decoration: none;">
+                            <span class="fa fa-info-circle"></span>
+                            <small class="text-left">   Bantuan Sosial Kelompok</small>
+                        </a>
+                    <?php endif; ?>
+                </li>
+                <li>
+                    <a href="createLaporan.php" style="text-decoration: none;">
+                        <span class="fa fa-list-alt"></span>
+                        <small>Laporan</small>
                     </a>
-                <?php endif; ?>
                 </li>
             </ul>
         </div>
@@ -122,11 +143,13 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
                 <label for="menu-toggle">
                     <span class="fa-solid fa-bars mt-3" style="color: rgb(255, 255, 255);"></span>
                 </label>
+
                 <div class="dropdown">
                     <span><i class="fa-solid fa-user mr-1" style="color: rgb(255, 255, 255);"></i></span>
                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color: rgb(255, 255, 255);">
                         <b>User</b>
                     </a>
+
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="profil.php">Profil</a></li>
                         <li><a class="dropdown-item" href="Back-End/logout.php">Logout</a></li>
@@ -191,4 +214,5 @@ $penduduk = mysqli_fetch_assoc($resultPenduduk);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

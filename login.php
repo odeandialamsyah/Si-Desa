@@ -12,7 +12,7 @@
     <title>Sistem Informasi Desa</title>
 
     <!-- Custom fonts for this template-->
-     <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="login.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -47,6 +47,14 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
                                     </div>
+
+                                    <!-- Success Message -->
+                                    <?php if (isset($_GET['success'])): ?>
+                                        <div class="alert alert-success" role="alert">
+                                            <?= htmlspecialchars($_GET['success']) ?>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <form class="user" action="Back-End/proses_login.php" method="POST">
                                         <div class="form-group">
                                             <input type="email" name="email" class="form-control form-control-user"

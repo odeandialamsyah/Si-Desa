@@ -8,37 +8,70 @@ if (!isset($_SESSION['email'])) {
 
 // Mendapatkan role dari session
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
+$id = $_GET['content_id'];
 
 include 'Back-End/Koneksi/koneksi.php';
 // Proses Create jika form disubmit
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['submit'])) {
+    // Pastikan koneksi sudah dibuat
+    if (!$conn) {
+        die("Koneksi gagal: " . mysqli_connect_error());
+    }
+
+    $id = $_POST['id'];
     $Judul = $_POST['judul'];
-    $foto = $_FILES['photo']['name'];
-    $foto_tmp = $_FILES['photo']['tmp_name'];
-    $greeting  = $_POST['greeting'];
+    $greeting = $_POST['greeting'];
     $visi = $_POST['visi'];
     $misi = $_POST['misi'];
 
-    // Upload file ke folder "uploads"
-    if (!file_exists('uploads')) {
-        mkdir('uploads', 0777, true);
-    }
-    move_uploaded_file($foto_tmp, "uploads/$foto");
+    // Cek apakah ada file baru yang diunggah
+    if (!empty($_FILES['photo']['name'])) {
+        $foto = $_FILES['photo']['name'];
+        $foto_tmp = $_FILES['photo']['tmp_name'];
 
-    $stmt = $conn->prepare("INSERT INTO content (judul, photo, greeting , visi, misi) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $Judul, $foto, $greeting, $visi, $misi);
+        // Pastikan folder upload ada
+        if (!file_exists('uploads')) {
+            mkdir('uploads', 0777, true);
+        }
 
-    if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='dashboard.php';</script>";
+        // Pindahkan file ke folder uploads
+        move_uploaded_file($foto_tmp, "uploads/$foto");
+
+        // Perbaiki query SQL
+        $sql = "UPDATE content SET judul = ?, photo = ?, greeting = ?, visi = ?, misi = ? WHERE content_id = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Query gagal dipersiapkan: " . $conn->error);
+        }
+
+        $stmt->bind_param("sssssi", $Judul, $foto, $greeting, $visi, $misi, $id);
     } else {
-        echo "<script>alert('Gagal menambahkan data!');</script>";
+        // Jika tidak ada file baru, update tanpa mengubah gambar
+        $sql = "UPDATE content SET judul = ?, greeting = ?, visi = ?, misi = ? WHERE content_id = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Query gagal dipersiapkan: " . $conn->error);
+        }
+
+        $stmt->bind_param("ssssi", $Judul, $greeting, $visi, $misi, $id);
+    }
+
+    // Eksekusi query
+    if ($stmt->execute()) {
+        echo "<script>alert('Data berhasil diperbarui!'); window.location.href='konten.php';</script>";
+    } else {
+        echo "<script>alert('Gagal memperbarui data: " . $stmt->error . "');</script>";
     }
 
     $stmt->close();
     $conn->close();
 }
 
-$querykonten = 'SELECT * FROM content';
+
+
+$querykonten = "SELECT * FROM content WHERE content_id = $id";
 $resultkonten = mysqli_query($conn, $querykonten);
 $konten = mysqli_fetch_assoc($resultkonten);
 
@@ -193,7 +226,6 @@ if (isset($_GET['potensi_id'])) {
             </div>
         </header>
         <main>
-            <?php if (!$konten) { ?>
                 <div class="container mt-3">
                     <h2 class="text-center"><b>DASHBOARD</b></h2>
                     <div class="container mt-5">
@@ -202,41 +234,29 @@ if (isset($_GET['potensi_id'])) {
                             <div class="mb-3">
                                 <label for="photo" class="form-label">Foto</label>
                                 <input type="file" class="form-control" id="photo" name="photo" required>
+                                <input type="hidden" class="form-control" id="photo" name="id" value="<?= $konten['content_id'] ?>">
                             </div>
                             <div class="mb-3">
                                 <label for="judul" class="form-label">Nama</label>
-                                <textarea class="form-control" id="judul" name="judul" rows="3" required></textarea>
+                                <textarea class="form-control" id="judul" name="judul" rows="3" required><?= $konten['Judul'] ?></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="greeting " class="form-label">Sambutan</label>
-                                <textarea class="form-control" id="greeting" name="greeting" rows="3" required></textarea>
+                                <textarea class="form-control" id="greeting" name="greeting" rows="3" required><?= $konten['greeting'] ?></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="visi" class="form-label">Visi</label>
-                                <textarea class="form-control" id="visi" name="visi" rows="3" required></textarea>
+                                <textarea class="form-control" id="visi" name="visi" rows="3" required><?= $konten['visi'] ?></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="misi" class="form-label">Misi</label>
-                                <textarea class="form-control" id="misi" name="misi" rows="3" required></textarea>
+                                <textarea class="form-control" id="misi" name="misi" rows="3" required><?= $konten['misi'] ?></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="submit" name="submit" class="btn btn-primary">Simpan</button>
                             <a href="dashboard.php" class="btn btn-secondary">Kembali</a>
                         </form>
                     </div>
                 </div>
-            <?php } else { ?>
-                <div class="d-flex flex-column align-items-center justify-content-center my-5 p-4 border rounded shadow-sm" style="max-width: 600px; margin: auto; background-color: #f8f9fa;">
-                    <h4 class="text-center mb-3" style="font-weight: bold; color: #333;">Ganti Konten Landing Page</h4>
-                    <p class="text-center mb-4" style="font-size: 16px; color: #555;">
-                        Apakah Anda ingin mengganti konten landing page utama? Klik tombol di bawah untuk melanjutkan.
-                    </p>
-                    <a href="edit-konten.php?content_id=<?= $konten['content_id'] ?>"
-                        onclick="return confirm('Apakah Anda yakin ingin mengganti konten yang ada?')"
-                        class="btn btn-danger btn-lg px-5">
-                        Ganti Landing Page
-                    </a>
-                </div>
-            <?php } ?>
             <div class="table-container">
                 <h2 class="text-center my-4"><b>Pendapatan Desa</b></h2>
                 <tr>

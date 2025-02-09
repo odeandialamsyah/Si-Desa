@@ -221,9 +221,6 @@ $row = mysqli_fetch_assoc($result);
                 <li class="nav-item">
                     <a class="nav-link" href="#section5">PENDAPATAN DAN POTENSI DESA</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="createLaporan.php">PENGADUAN</a>
-                </li>
             </ul>
         </div>
     </nav>
