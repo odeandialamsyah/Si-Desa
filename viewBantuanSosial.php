@@ -1,49 +1,48 @@
 <?php
 session_start();
-// Memastikan user sudah login dan memiliki session yang valid
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
 }
 
-// Mendapatkan role dari session
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
-
 include 'Back-End/Koneksi/koneksi.php';
 
-if (isset($_GET['nik'])) {
-    // Ambil NIK dari URL dan lakukan sanitasi untuk menghindari SQL Injection
-    $nik = mysqli_real_escape_string($conn, $_GET['nik']);
+if (isset($_GET['bantuan_id'])) {
+    $bantuan_id = mysqli_real_escape_string($conn, $_GET['bantuan_id']);
+    $query = "SELECT b.bantuan_id, b.nama_bantuan, b.jenis_bantuan, p.kk, p.nama_lengkap, p.jumlah_keluarga,  d.nama_daerah, b.foto_bukti 
+              FROM bantuan b
+              LEFT JOIN penduduk p ON b.penduduk_id = p.penduduk_id
+              LEFT JOIN daerah d ON p.daerah_id = d.daerah_id
+              WHERE b.bantuan_id = '$bantuan_id'";
 
-    // Query untuk mendapatkan data penduduk sekaligus daerah dan agama
-    $query = "SELECT 
-            penduduk.*, 
-            daerah.nama_daerah, 
-            agama.nama_agama
-        FROM 
-            penduduk
-        LEFT JOIN daerah ON penduduk.daerah_id = daerah.daerah_id
-        LEFT JOIN agama ON penduduk.agama_id = agama.agama_id
-        WHERE 
-            penduduk.nik = '$nik'
-    ";
     $result = mysqli_query($conn, $query);
 
-    // Validasi hasil query
     if (!$result) {
         die("Query gagal: " . mysqli_error($conn));
     }
 
-    // Ambil data penduduk beserta data daerah dan agama
-    $penduduk = mysqli_fetch_assoc($result);
-
+    if (mysqli_num_rows($result) > 0) {
+        $bantuan = mysqli_fetch_assoc($result);
+    } else {
+        die("<p>ID Bantuan tidak ditemukan.</p>");
+    }
 } else {
-    echo "<p>NIK tidak ditemukan di URL.</p>";
+    die("<p>ID Bantuan tidak ditemukan di URL.</p>");
 }
+
+$SqlDetail = "SELECT * 
+FROM penduduk 
+JOIN users ON penduduk.user_id = users.user_id
+JOIN bantuan ON bantuan.user_id = users.user_id
+WHERE bantuan.bantuan_id = '$bantuan_id'";
+$resultDetail = mysqli_query($conn, $SqlDetail);
+$detail = mysqli_fetch_assoc($resultDetail);
 
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -56,14 +55,10 @@ if (isset($_GET['nik'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Sistem Informasi Desa</title>
 </head>
+
 <body>
     <style>
-
-        .main{
-            font-size: 11px !important;
-        }
-        
-        .penduduk-detail {
+        .bantuan-detail {
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -71,24 +66,87 @@ if (isset($_GET['nik'])) {
             max-width: 600px;
             margin: 0 auto;
         }
-        .penduduk-detail img {
-            width: 150px;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-            margin-bottom: 15px;
-        }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         table td {
             padding: 8px;
             border-bottom: 1px solid #ddd;
         }
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        .card {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .card+.card {
+            margin-top: 20px;
+        }
+
+        .card img {
+            max-width: 100px; /* Atur lebar maksimum gambar */
+            height: auto;
+        }
+
+        .table-custom {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border: 1px solid #dee2e6;
+        }
+
+        .table-custom th,
+        .table-custom td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table-custom thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table-custom tbody+tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+        .table-custom .table-sm th,
+        .table-custom .table-sm td {
+            padding: 0.3rem;
+        }
+
+        .table-custom .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-custom .table-bordered th,
+        .table-custom .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-custom .table-bordered thead th,
+        .table-custom .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+
+        .table-custom .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .table-custom .table-hover tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.075);
         }
     </style>
     <input type="checkbox" id="menu-toggle">
@@ -97,7 +155,7 @@ if (isset($_GET['nik'])) {
             <h3><b>SID</b><span><b>esa</b></span></h3>
         </div>
 
-                <div class="side-content">
+        <div class="side-content">
             <div class="profile">
                 <!-- Bungkus gambar dengan tag <a> -->
                 <a href="dtlAdmn.html">
@@ -121,7 +179,7 @@ if (isset($_GET['nik'])) {
                         <small>Data Klasifikasi</small>
                     </a>
                 </li>
-               
+
                 <li>
                     <a href="dataPenduduk.php" class="active" style="text-decoration: none;">
                         <span class="fa fa-user"></span>
@@ -184,97 +242,68 @@ if (isset($_GET['nik'])) {
         </header>
 
         <main>
-            <table style="font-size: 12px;">
-                <tr class="large-font">
-                    <a href="dataPenduduk.php" style="color: black; text-decoration: none;">
-                            <i class="fas fa-caret-left mr-2" style="color: #000000; font-size: 15px;"></i></a>
-                    <b>DATA PENDUDUK</b></tr>
-                <tr>
-                  <tbody>
-                    <tr style="height:25px;">
-                        <td rowspan="7" width="250px">
-                        <?php
-                        if ($penduduk) {
-                            $img_src = "Back-End/Uploads/foto_diri/" . $penduduk['foto_diri'];
-                            echo "<img src='$img_src' alt='Foto Diri' width='250px'>";
-                        } else {
-                            echo "<p>Foto diri belum diunggah.</p>";
-                        }
-                        ?>
-                    </td>
-                      <td width="350px"><b>NIK</b></td>
-                      <td><?php echo htmlspecialchars($penduduk['nik']); ?></td>
+            <div class="bantuan-detail">
+                <h2>Detail Bantuan Sosial</h2>
+                <table class="table table-custom table-striped table-hover">
+                    <tr>
+                        <td><b>Nama Bantuan</b></td>
+                        <td><?php echo $bantuan['nama_bantuan']; ?></td>
                     </tr>
-                    <tr style="height:25px;">
-                      <td><b>Nama</b></td>
-                      <td><?php echo htmlspecialchars($penduduk['nama_lengkap']); ?></td>
+                    <tr>
+                        <td><b>Jenis Bantuan</b></td>
+                        <td><?php echo htmlspecialchars($bantuan['jenis_bantuan']); ?></td>
                     </tr>
-                    <tr style="height:25px;">
-                      <td><b>Jenis Kelamin</b></td>
-                      <td><?php echo htmlspecialchars($penduduk['jenis_kelamin']); ?></td>
+                    <tr>
+                        <td><b>Foto Bukti</b></td>
+                        <td>
+                            <img src='Back-End/uploads/<?php echo "{$bantuan['foto_bukti']}"; ?>' alt='Foto Bukti' width='100'>
+                            <!-- <button class="btn btn-primary btn-sm" onclick="setPreview('Back-End/uploads/<?php echo $bantuan['foto_bukti']; ?>')" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button> -->
+                        </td>
                     </tr>
-                    <tr style="height:25px;">
-                      <td><b>Tempat, Tanggal Lahir</b></td>
-                      <td><?php echo htmlspecialchars($penduduk['tempat_lahir']); ?>, <?php echo htmlspecialchars($penduduk['tanggal_lahir']); ?></td>
-                    </tr>
-                    <tr style="height:25px;">
-                      <td><b>Agama</b></td>
-                      <td><?php echo htmlspecialchars($penduduk['nama_agama']); ?></td>
-                    </tr>
-                    <tr style="height:25px;">
-                      <td><b>Alamat</b></td>
-                      <td><?php echo htmlspecialchars($penduduk['nama_daerah']); ?></td>
-                    </tr>
-                  </tbody>
-            </table>
+                </table>
+            </div>
 
-            <table>
-                <tr class="large-font"><b>DATA DOKUMEN</b></tr>
-                <tr>
-                    <table class="table table-striped">
-                        <thead style="background-color: #D9D9D9;">
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Nama Dokumen</th>
-                                <th scope="col">Jenis Dokumen</th>
-                                <th scope="col">Opsi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>E-KTP</td>
-                                <td>Identitas</td>
-                                <td>
-                                    <?php
-                                    if ($penduduk) {
-                                        $file_srcktp = "Back-End/Uploads/file_nik/" . $penduduk['file_nik'];
-                                        echo "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#previewModal' onclick='setPreview(\"$file_srcktp\")'>Preview</button>";
-                                    } else {
-                                        echo "<p>Dokumen E-KTP belum diunggah.</p>";
-                                    }
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>KK</td>
-                                <td>Kartu Keluarga</td>
-                                <td>
-                                <?php
-                                    if ($penduduk) {
-                                        $file_srckk = "Back-End/Uploads/file_kk/" . $penduduk['file_kk'];
-                                        echo "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#previewModal' onclick='setPreview(\"$file_srckk\")'>Preview</button>";
-                                    } else {
-                                        echo "<p>Dokumen KK belum diunggah.</p>";
-                                    }
-                                    ?>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </tr>
-            </table>
+            <div class="card">
+                <h3>Informasi Tambahan</h3>
+                <p>Berikut adalah informasi tambahan terkait bantuan sosial yang diberikan.</p>
+                <table class="table table-custom table-striped table-hover">
+                    <tr>
+                        <td><b>KK</b></td>
+                        <td>
+                            <!-- <img src="Back-End/Uploads/file_kk/<?php echo $detail['file_kk']; ?>" alt="file_kk" width="100"> -->
+                            <button class="btn btn-primary btn-sm" onclick="setPreview('Back-End/Uploads/file_kk/<?php echo $detail['file_kk']; ?>')" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Surat Keterangan Tidak Mampu</b></td>
+                        <td>
+                            <!-- <img src="Back-End/Uploads/keterangan_tidak_mampu/<?php echo $detail['surat_keterangan_tidak_mampu']; ?>" alt="surat_keterangan_tidak_mampu" width="100"> -->
+                            <button class="btn btn-primary btn-sm" onclick="setPreview('Back-End/Uploads/keterangan_tidak_mampu/<?php echo $detail['surat_keterangan_tidak_mampu']; ?>')" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Surat Keterangan Dari Kepala Desa</b></td>
+                        <td>
+                            <!-- <img src="Back-End/Uploads/keterangan_kepala_desa/<?php echo $detail['surat_keterangan_dari_kepala_desa']; ?>" alt="surat_keterangan_dari_kepala_desa" width="100"> -->
+                            <button class="btn btn-primary btn-sm" onclick="setPreview('Back-End/Uploads/keterangan_kepala_desa/<?php echo $detail['surat_keterangan_dari_kepala_desa']; ?>')" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Foto KTP</b></td>
+                        <td>
+                            <!-- <img src="Back-End/Uploads/ktp/<?php echo $detail['Foto_ktp']; ?>" alt="Foto_ktp" width="100"> -->
+                            <button class="btn btn-primary btn-sm" onclick="setPreview('Back-End/Uploads/ktp/<?php echo $detail['Foto_ktp']; ?>')" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Foto Rumah</b></td>
+                        <td>
+                            <!-- <img src="Back-End/Uploads/rumah/<?php echo $detail['Foto_rumah']; ?>" alt="Foto_rumah" width="100"> -->
+                            <button class="btn btn-primary btn-sm" onclick="setPreview('Back-End/Uploads/rumah/<?php echo $detail['Foto_rumah']; ?>')" data-bs-toggle="modal" data-bs-target="#previewModal">Preview</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </main>
 
         <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
@@ -291,7 +320,6 @@ if (isset($_GET['nik'])) {
             </div>
         </div>
 
-
         <script>
             function setPreview(url) {
                 // Setel atribut src iframe dengan URL yang diberikan
@@ -307,4 +335,5 @@ if (isset($_GET['nik'])) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     </div>
 </body>
+
 </html>
